@@ -89,11 +89,16 @@ class BlankSlateDirectoryBlogrollWidget extends WP_Widget {
 			<div class="feature-post">
 			<?php if( $query->have_posts() ): ?>
 				<?php while( $query->have_posts() ): $query->the_post(); ?>
-					
 					<div class="image">
-						<a href="<?= the_permalink() ?>">
-						<?php the_post_thumbnail('small'); ?>
-						</a>
+						<?php if ( get_the_post_thumbnail() != '' ) { ?>
+ 							<a href="<?= the_permalink() ?>">
+   								<?php the_post_thumbnail('small'); ?>
+  							</a>
+						<?php } else { ?>
+							<a href="<?= the_permalink() ?>">
+   								<img src="<?= catch_that_image(); ?>" >
+  							</a>
+						<?php } ?>
 					</div>
 					<div class="content">
 						<?php the_title('<h2>','</h2>'); ?>
@@ -121,9 +126,15 @@ class BlankSlateDirectoryBlogrollWidget extends WP_Widget {
 					
 						<li>
 							<div class="image">
-								<a href="<?= the_permalink() ?>">
-								<?php the_post_thumbnail('small'); ?>
-								</a>
+								<?php if ( get_the_post_thumbnail() != '' ) { ?>
+ 									<a href="<?= the_permalink() ?>">
+   										<?php the_post_thumbnail('small'); ?>
+  									</a>
+								<?php } else { ?>
+									<a href="<?= the_permalink() ?>">
+   										<img src="<?= catch_that_image(); ?>" >
+  									</a>
+								<?php } ?>
 							</div>
 							<div class="content">
 								<?php the_title('<h2>','</h2>'); ?>

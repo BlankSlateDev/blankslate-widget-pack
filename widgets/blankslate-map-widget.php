@@ -48,6 +48,15 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 			<input class="widefat" id="<?=$this->get_field_id('keys'); ?>" name="<?=$this->get_field_name('keys'); ?>" type="text" value="<?=$instance['keys'];?>" />
 		  </label>
 		</p>
+		<p>
+			<label for="<?= $this->get_field_id('business-display') ?>">Display Businesses?
+				<input type="checkbox" 
+						class="widefat" 
+						id="<?= $this->get_field_id('business-display'); ?>" 
+						name="<?= $this->get_field_name('business-display') ?>" 
+						<?php checked($instance['business-display'], 'on'); ?> >
+			</label>
+		</p>
 		
 		<?php
 	}
@@ -58,6 +67,7 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 		$instance['description'] = $new_instance['description'];
 		$instance['centerpoint'] = esc_attr( strip_tags($new_instance['centerpoint']) );
 		
+		$instance['business-display'] = $new_instance['business-display'];
 		$instance['business-category'] = esc_attr( strip_tags($new_instance['business-category']) );
 		$instance['address'] = esc_attr( strip_tags($new_instance['address']) );
 		$instance['keys'] = esc_attr( strip_tags($new_instance['keys']) );
@@ -66,8 +76,8 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 	}
 	
 	function widget($args, $instance) {
-	
 		extract( $args );
+		
 		global $default_results, $default_search, $hide_location_search, $detect_location, $default_location, $near, $q, $cat, $featured_tier;
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		$site_root_url = home_url();
@@ -75,6 +85,7 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 		$centerpoint = $instance['centerpoint'];
 		$description = $instance['description'];
 		
+		$businessDisplay = $instance['business-display'] ? 'true' : 'false';
 		$keys = $instance['keys'];
 		$address = $instance['address'];
 		$businessCategory = $instance['business-category'];
@@ -117,7 +128,7 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 				</div>
 				<div class="map-content">
 				<p>
-					<?= $description; ?>
+					<?= nl2br($description); ?>
 				</p>
 
 					<?php
@@ -129,7 +140,7 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 						} 
 					?>
 						
-					<ul class="blankslate-business-list">
+					<ul class="blankslate-business-list display-<?= $businessDisplay ?>">
 						<?php for($f=0; $f < 2; $f++){
 							$business = current($businesses);
 							next($businesses);

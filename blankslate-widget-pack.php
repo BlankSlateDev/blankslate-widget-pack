@@ -27,11 +27,23 @@ require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-directory-blogroll-wid
 require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-hero-unit-widget.php' );
 
 function widget_pack_plugin_scripts(){
-	if (!is_admin()){
 		wp_enqueue_script('widget-pack', BLANKSLATE_WIDGET_PACK_URL . 'assets/js/widget-pack.js', false, '1.1', 'all');
 		wp_enqueue_style('widget-pack', BLANKSLATE_WIDGET_PACK_URL . 'assets/css/widget-pack.css', false, '1.0', 'all');
-	}
 }
 add_action('wp_enqueue_scripts','widget_pack_plugin_scripts');
+
+function catch_that_image() {
+  global $post, $posts;
+  $first_img = '';
+  ob_start();
+  ob_end_clean();
+  $output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches);
+  $first_img = $matches[1][0];
+
+  if(empty($first_img)) {
+    $first_img = "http://placehold.it/100x100";
+  }
+  return $first_img;
+}
 
 ?>

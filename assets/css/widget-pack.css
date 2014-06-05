@@ -10,6 +10,13 @@
 
 .bs-widget-pack header {
 	padding: 0;
+	clear: both;
+	overflow: auto;
+}
+
+.bs-widget-pack img {
+	max-width: 100%;
+	height: auto;
 }
 
 .bs-widget-pack header h3 {
@@ -222,6 +229,10 @@
 	border-top: 5px solid #112B3A;
 }
 
+.blankslate-business-loop .blankslate-business-list {
+	clear:both;
+}
+
 .blankslate-business-loop .blankslate-business-list li {
 	width: 23%;
 	float: left;
@@ -236,7 +247,7 @@
 	}
 
 .blankslate-business-loop .blankslate-business-list .blankslate-biz-hold {
-	background: #fff;
+	background: transparent;
 }
 
 .blankslate-business-loop .blankslate-business-list .blankslate-biz-info {
@@ -297,6 +308,13 @@
 		}
 	}
 
+.directory-blogroll.left .feature-post {
+	padding-right: 5px;
+}
+.directory-blogroll.right .feature-post {
+	padding-left: 5px;
+}
+
 .entry-content .directory-blogroll .feature-post {
 	padding-right: 15px;
 	clear: both;
@@ -305,6 +323,7 @@
 .entry-content .directory-blogroll .secondary-posts li {
 	overflow: auto;
 	padding: 10px;
+	clear: both;
 }
 
 .directory-blogroll .secondary-posts .image {
@@ -360,9 +379,10 @@
 	box-sizing: border-box;
 }
 
-.business-and-post-widget .map-content p {
+.page .business-and-post-widget .map-content p {
 	margin: 0;
 	padding-bottom: 48px;
+	font: 300 20px 'Source Sans Pro', sans-serif;
 }
 
 /*
@@ -455,7 +475,6 @@
 
 .business-and-post-widget {
 	border-top: 5px solid #112B3A;
-	overflow: auto;
 }
 
 .business-and-post-widget img {
@@ -522,7 +541,7 @@ float: right;
 	width: 31.33%;
 	padding: 0;
 	margin: 0 1% 20px;
-	background: #f4f4f4;
+	background: transparent;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
@@ -608,3 +627,10 @@ float: right;
 			font-size: 15px;
 		}
 	}
+/*
+*	State
+**/
+
+.bs-widget-pack .display-false {
+	display: none;
+}

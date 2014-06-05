@@ -1,37 +1,35 @@
 <?php
 /*
-Plugin Name: Blankslate Map Widget
-Description: Map Widget for Widget Pack
+Plugin Name: BlankSlate Directory Business Loop
+Description: Searches for and displays four businesses based on criteria
 Author: Blankslate (DH)
-Version: 1.0.1
+Version: 1.0.0
 */
 
-class BlankSlateDirectoryMapWidget extends WP_Widget {
-
-	function BlankSlateDirectoryMapWidget() {
+class BlankSlateDirectoryBusinessLoopWidget extends WP_Widget {
+	function BlankSlateDirectoryBusinessLoopWidget() {
 		$widget_ops = array(
-			'classname' => 'BlankSlateDirectoryMapWidget', 
-			'description' => 'Display BlankSlate Directory Map and Related Info' );
-			
-		$this->WP_Widget('BlankSlateDirectoryMapWidget', 'BlankSlate Directory Map', $widget_ops);
+			'classname' => 'BlankSlateDirectoryBusinessLoopWidget', 
+			'description' => 'Searches for and displays four businesses based on criteria' );
+
+		$this->WP_Widget('BlankSlateDirectoryBusinessLoopWidget', 'BlankSlate Directory Business Loop', $widget_ops);
 	}
 
 	function form($instance) {
 		$instance = wp_parse_args( (array) $instance, array( 'title' => '' ) );
 		?>
+		<script type="text/javascript">
+			(function(){
+				jQuery('.expand').on('click', function(){
+
+					jQuery(this).parent().next('ul').toggle();
+				});
+			}());
+		</script>
 		<p>
 		  <label for="<?=$this->get_field_id('title'); ?>">Title:
 			<input class="widefat" id="<?=$this->get_field_id('title'); ?>" name="<?=$this->get_field_name('title'); ?>" type="text" value="<?=$instance['title'];?>" />
 		  </label>
-		</p>
-		<p>
-		  <label for="<?=$this->get_field_id('centerpoint'); ?>">Centerpoint for Map:
-			<input class="widefat" id="<?=$this->get_field_id('centerpoint'); ?>" name="<?=$this->get_field_name('centerpoint'); ?>" type="text" value="<?=$instance['centerpoint'];?>" />
-		  </label>
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id('description'); ?>">Description: </label><br>
-			<textarea id="<?php echo $this->get_field_id('description'); ?>" name="<?php echo $this->get_field_name('description'); ?>"><?= $instance['description']; ?></textarea>
 		</p>
 		<p>
 		  <label for="<?=$this->get_field_id('business-category'); ?>">Business Category:
@@ -44,9 +42,58 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 		  </label>
 		</p>
 		<p>
-		  <label for="<?=$this->get_field_id('keys'); ?>">Keys (2, comma separated):
+		  <label for="<?=$this->get_field_id('keys'); ?>">Keys (4, comma separated):
 			<input class="widefat" id="<?=$this->get_field_id('keys'); ?>" name="<?=$this->get_field_name('keys'); ?>" type="text" value="<?=$instance['keys'];?>" />
 		  </label>
+		</p>
+		<p>
+<style>
+	ul.cat_list {
+		margin-left:25px;
+		display:none;
+	}
+
+	ul.cat_list li {
+		padding:0px 8px;
+		border:1px solid #EEE;
+		padding-left:0;
+	}
+
+	ul.cat_list li span {
+		padding:0px;
+		display:block;
+		float:left;
+		text-align:center;
+		width:20px;
+		background:#EEE;
+		margin-right:10px;
+		cursor:pointer;
+		color:#EEE;
+	}
+
+	ul.cat_list li span.expand {
+		color:#000;
+	}
+
+	ul.cat_list.level-0 {
+		display:block;
+		margin-left:0px;
+	}
+</style>
+
+
+
+		<?php
+			$ls_cat_tree = blankslate_get_categories();
+			$ls_cats = blankslate_get_option($blankslate_prefix.'categories');
+
+			if(!is_array($ls_cats)){
+				$ls_cats = array();
+			}
+
+			$cat_html = blankslate_print_cats($ls_cat_tree, 'none', $ls_cats, 0);
+			echo $cat_html;
+		?>
 		</p>
 		
 		<?php
@@ -55,9 +102,6 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 	function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 		$instance['title'] = esc_attr( strip_tags($new_instance['title']) );
-		$instance['description'] = $new_instance['description'];
-		$instance['centerpoint'] = esc_attr( strip_tags($new_instance['centerpoint']) );
-		
 		$instance['business-category'] = esc_attr( strip_tags($new_instance['business-category']) );
 		$instance['address'] = esc_attr( strip_tags($new_instance['address']) );
 		$instance['keys'] = esc_attr( strip_tags($new_instance['keys']) );
@@ -67,14 +111,14 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 	
 	function widget($args, $instance) {
 	
+		global $post;
+	
 		extract( $args );
+		
 		global $default_results, $default_search, $hide_location_search, $detect_location, $default_location, $near, $q, $cat, $featured_tier;
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		$site_root_url = home_url();
 
-		$centerpoint = $instance['centerpoint'];
-		$description = $instance['description'];
-		
 		$keys = $instance['keys'];
 		$address = $instance['address'];
 		$businessCategory = $instance['business-category'];
@@ -96,56 +140,40 @@ class BlankSlateDirectoryMapWidget extends WP_Widget {
 		}
 
 		$queryParameters['rp'] = 12;
-		 
-		echo $before_widget;
-		?>
-		
-		<div class="bs-widget-pack business-and-post-widget">
-			<?php if($instance['title']): ?>
-				<header><h3><?=$instance['title']?></h3></header>
-			<?php endif; ?>
+
+		echo $before_widget; ?>
+
+			<div class="bs-widget-pack blankslate-business-loop">
+				<?php if($instance['title']): ?>
+					<header>
+						<h3><?= $instance['title'] ?></h3>
+					</header>
+				<?php endif; ?>
 			
-			<div class="content-wrapper">
-				<div class="map">
+				<?php
+					$featured = new SearchResults(null, $queryParameters);
+
+					if( $featured->call() === True ){
+						$results = $featured->getData();
+						$businesses = $results['data'];
+					} 
+				?>
+					
+				<ul class="blankslate-business-list">
 					<?php 
-						$centerpoint = urlencode($centerpoint);
-						$src = "http://maps.googleapis.com/maps/api/staticmap?center=" . $centerpoint . "&zoom=15&size=350x300&scale=2&markers=" . $centerpoint;
-					?>
-					<a href="http://maps.google.com/maps?daddr=<?= $centerpoint ?>">
-					<img src="<?= $src ?>">
-					</a>
-				</div>
-				<div class="map-content">
-				<p>
-					<?= $description; ?>
-				</p>
-
-					<?php
-						$featured = new SearchResults(null, $queryParameters);
-
-						if( $featured->call() === True ){
-							$results = $featured->getData();
-							$businesses = $results['data'];
-						} 
-					?>
-						
-					<ul class="blankslate-business-list">
-						<?php for($f=0; $f < 2; $f++){
+						for($f = 0; $f < 4; $f++){
 							$business = current($businesses);
 							next($businesses);
 							$l_count = $f+1;
 							
 							include BLANKSLATE_DIRECTORY_DIR.'/views/featured-part.php';
-						 } ?>
-					</ul>
-				</div>
+						}
+					?>
+				</ul>
 			</div>
-		</div>
-		<?php
 
-		echo $after_widget;
+		<?php echo $after_widget;
 	}
-
 }
 
-add_action('widgets_init', create_function('', 'return register_widget("BlankSlateDirectoryMapWidget");'));
+add_action('widgets_init', create_function('', 'return register_widget("BlankSlateDirectoryBusinessLoopWidget");'));

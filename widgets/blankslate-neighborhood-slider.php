@@ -66,7 +66,7 @@ class BlankSlateNeighborhoodSliderWidget extends WP_Widget {
 								<?php
 									$attachment_id = get_post_thumbnail_id( get_the_ID() );
 									if ( $attachment_id ){
-										$image_attributes = wp_get_attachment_image_src( $attachment_id, $size, 'full' );
+										$image_attributes = wp_get_attachment_image_src( $attachment_id, 'full' );
 									}
 
 									if ($image_attributes){
