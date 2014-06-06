@@ -32,6 +32,46 @@ function widget_pack_plugin_scripts(){
 }
 add_action('wp_enqueue_scripts','widget_pack_plugin_scripts');
 
+function blankslate_print_widget_cats ($arr, $parent, $selected, $pass = 0, $widget) {
+  global $blankslate_prefix;
+
+  $html = '<ul class="cat_list parent-'. $parent . ' level-'.$pass.'">' . PHP_EOL;
+  foreach ( $arr as $v ) {
+    if (!is_array($v['name'])){
+      $html.= '<li class="level-' . $pass . '">';
+      if ( array_key_exists('children', $v) ) {
+        $html .= '<span class="expand" key="' . $v['key'] . '">+</span>';
+      } else {
+        $html .= '<span class="end" key="' . $v['key'] . '">o</span>';
+      }
+
+      $checked = '';
+      if (!isset( $selected[$v['name']] )){
+        $selected[$v['name']] = '';
+      }
+
+      $instance = $selected[$v['name']];
+
+      if ( isset($instance) && $instance == 'on' ){
+        $checked = ' checked="checked"';
+      }
+
+      $html .= '<input type="checkbox" ' .
+              $checked .
+             ' id="' . $widget->get_field_id( $v['name'] ) . '"' .
+             ' name="' . $widget->get_field_name( $v['name'] ) . '"' .
+             '>' . $v['name'] . '</li>' . PHP_EOL;
+    }
+
+    if ( array_key_exists('children', $v) ) {
+      $html .= blankslate_print_widget_cats($v['children'], $v['key'], $selected, $pass+1, $widget);
+    }
+  }
+
+  $html.= '</ul>' . PHP_EOL;
+  return $html;
+}
+
 function catch_that_image() {
   global $post, $posts;
   $first_img = '';
