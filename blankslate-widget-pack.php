@@ -223,7 +223,7 @@ function blankslate_pages_func( $atts, $content = null ){
           'id'    => 123,
           'type'  => 'link',
           'show_photo' => true,
-          'tracking_id' => ''
+          'tracking_id' => 'card'
   ), $atts, 'blankslate_pages' ) );
 
   $query = array();
