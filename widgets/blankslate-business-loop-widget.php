@@ -21,14 +21,6 @@ class BlankSlateDirectoryBusinessLoopWidget extends WP_Widget {
 	function form($instance) {
 		$instance = wp_parse_args( (array) $instance, array( 'title' => '' ) );
 		?>
-		<script type="text/javascript">
-			(function(){
-				jQuery('.expand').live('click', function(){
-					jQuery(this).parent().next('ul').toggle();
-				});
-			}());
-		</script>
-
 		<style type="text/css">
 			ul.cat_list {
 				margin-left:25px;
@@ -90,6 +82,15 @@ class BlankSlateDirectoryBusinessLoopWidget extends WP_Widget {
 			?>
 			<a href="javascript:(void);" class="ls-expand-cats">Expand All</a> 
 		</p>
+		<script type="text/javascript">
+			(function(jQuery){
+				jQuery('.expand').live('click', function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					jQuery(this).parent().next('ul').toggle();
+				});
+			}(jQuery));
+		</script>
 
 		<?php
 	}
@@ -189,6 +190,21 @@ class BlankSlateDirectoryBusinessLoopWidget extends WP_Widget {
 						}
 					?>
 				</ul>
+
+				<header>
+					<h3>Promotions Are:</h3>
+					<?php
+						$query = array();
+						//$query['promote_on'] = 'brownstoner_basic';
+						$promoted = new Promoted();
+
+						if ( $promoted->call() === True ){
+							$results = $promoted->getData();
+							$businesses = $results['data'];
+							//var_dump($businesses);
+						}
+					?>
+				</header>
 			</div>
 
 		<?php echo $after_widget;

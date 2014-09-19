@@ -90,15 +90,13 @@ class BlankSlateDirectoryBlogrollWidget extends WP_Widget {
 			<?php if( $query->have_posts() ): ?>
 				<?php while( $query->have_posts() ): $query->the_post(); ?>
 					<div class="image">
-						<?php if ( get_the_post_thumbnail() != '' ) { ?>
- 							<a href="<?= the_permalink() ?>">
+						<a href="<?= the_permalink() ?>">
+	  						<?php if ( get_the_post_thumbnail() != '' ) { ?>
    								<?php the_post_thumbnail('small'); ?>
-  							</a>
-						<?php } else { ?>
-							<a href="<?= the_permalink() ?>">
-   								<img src="<?= catch_that_image(); ?>" >
-  							</a>
-						<?php } ?>
+								<?php } else { ?>
+	   								<img src="<?= catch_that_image(); ?>" >
+								<?php } ?>
+							</a>
 					</div>
 					<div class="content">
 						<?php the_title('<h2>','</h2>'); ?>
@@ -132,7 +130,7 @@ class BlankSlateDirectoryBlogrollWidget extends WP_Widget {
   									</a>
 								<?php } else { ?>
 									<a href="<?= the_permalink() ?>">
-   										<img src="<?= catch_that_image(); ?>" >
+											<img src="<?=BLANKSLATE_DIRECTORY_URL?>scripts/timthumb.php?w=300&h=200&zc=1&src=<?= catch_that_image(); ?>" >
   									</a>
 								<?php } ?>
 							</div>

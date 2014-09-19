@@ -36,10 +36,16 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 		  </label>
 		</p>
 		<hr>
-		<p>
-		  <label for="<?=$this->get_field_id('business-category'); ?>">Business Category:
-			<input class="widefat" id="<?=$this->get_field_id('business-category'); ?>" name="<?=$this->get_field_name('business-category'); ?>" type="text" value="<?=$instance['business-category'];?>" />
-		  </label>
+		</p>
+			<label>Categories: 
+			<?php
+				
+				$ls_cat_tree = blankslate_get_categories();
+				$cat_html = blankslate_print_widget_cats( $ls_cat_tree[0]['children'], 'none', $instance, 0, $this );
+				echo $cat_html;
+
+			?>
+			<a href="javascript:(void);" class="ls-expand-cats">Expand All</a> 
 		</p>
 		<p>
 		  <label for="<?=$this->get_field_id('address'); ?>">Address:
@@ -64,21 +70,42 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 			<input type="radio" name="<?=$this->get_field_name('layout'); ?>" value="right" id="<?=$this->get_field_id('right');?>" checked/>  
 			<?php endif; ?>
 		</p>
+
+		</p>
+
+
+			<label>Categories: 
+			<?php
+				
+				$ls_cat_tree = blankslate_get_categories();
+				$cat_html = blankslate_print_widget_cats( $ls_cat_tree[0]['children'], 'none', $instance, 0, $this );
+				echo $cat_html;
+
+			?>
+			<a href="javascript:(void);" class="ls-expand-cats">Expand All</a> 
+		</p>
 		
 		<?php
 	}
 	
 	function update($new_instance, $old_instance) {
+		$categories = blankslate_get_raw_categories();
+		$fields = array();
+		foreach ($categories as $cat) {
+			array_push($fields, $cat['name'] );
+		}
+
 		$instance = $old_instance;
 		$instance['title'] = esc_attr( strip_tags($new_instance['title']) );
 
 		$instance['post-title'] = esc_attr( strip_tags($new_instance['post-title']) );
 		$instance['blog-category'] = esc_attr( strip_tags($new_instance['blog-category']) );
 
-		$instance['business-category'] = esc_attr( strip_tags($new_instance['business-category']) );
 		$instance['address'] = esc_attr( strip_tags($new_instance['address']) );
 		$instance['keys'] = esc_attr( strip_tags($new_instance['keys']) );
-		
+		foreach ($fields as $field) {
+			$instance[$field] = $new_instance[$field];
+		}
 		$instance['layout'] = esc_attr( strip_tags($new_instance['layout']) );
 
 		return $instance;
@@ -95,7 +122,13 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 
 		$keys = $instance['keys'];
 		$address = $instance['address'];
-		$businessCategory = $instance['business-category'];
+		$categories = '';
+		foreach ($instance as $key => $value) {
+			if ($value == 'on'){
+				$categories .= slugify($key) . ',';
+			}
+		}
+		$categories = rtrim($categories, ',');
 		
 		$layout = $instance['layout'];
 
@@ -105,14 +138,8 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 			$lng = $addressArray['lon'];
 		}
 
-		//If user has input keys, use them to display businesses
-		//Else, use address and category
 		if ($keys != '') {
 			$queryParameters['keys'] = $keys;
-		} else {
-			$queryParameters['lat'] = $lat;
-			$queryParameters['lng'] = $lng;
-			$queryParameters['query'] = $businessCategory;
 		}
 
 		$queryParameters['rp'] = 12;
@@ -148,9 +175,13 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 					<?php if ( $the_query->have_posts() ) : ?>
 
 	  				<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
-	  					<a href="<?= the_permalink() ?>">
-	    				<?php the_post_thumbnail(); ?>
-	    				</a>
+ 							<a href="<?= the_permalink() ?>">
+	  						<?php if ( get_the_post_thumbnail() != '' ) { ?>
+   								<?php the_post_thumbnail('small'); ?>
+								<?php } else { ?>
+	   								<img src="<?= catch_that_image(); ?>" >
+							<?php } ?>
+							</a>
 	    				<?php the_title('<h2>', '</h2>'); ?>
 	    				<?php the_excerpt('<p>', '</p>'); ?>
 	  				<?php endwhile; ?>
@@ -166,12 +197,14 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 
 				<div class="businesses">
 					<?php
-						$featured = new SearchResults(null, $queryParameters);
-
-						if( $featured->call() === True ){
-							$results = $featured->getData();
+						$query = array();
+						$query['promote_on'] = 'brownstoner_basic';
+						$query['cat'] = $categories;
+						$promoted = new Promoted(null, $query);
+						if( $promoted->call() === True ){
+							$results = $promoted->getData();
 							$businesses = $results['data'];
-						} 
+						}
 					?>
 						
 					<ul class="blankslate-business-list">
@@ -180,8 +213,9 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 								$business = current($businesses);
 								next($businesses);
 								$l_count = $f+1;
-							
-								include BLANKSLATE_DIRECTORY_DIR.'/views/featured-part.php';
+								if ( $business ) {
+									print_business($business, 300, 200);
+								}
 							}
 						?>
 					</ul>
