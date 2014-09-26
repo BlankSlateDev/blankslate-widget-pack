@@ -1,5 +1,4 @@
 <?php
-#test
 class ShortcodeBusiness {
   public $id;
   public $name;

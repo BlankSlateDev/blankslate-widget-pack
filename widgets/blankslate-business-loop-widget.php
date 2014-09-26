@@ -190,21 +190,6 @@ class BlankSlateDirectoryBusinessLoopWidget extends WP_Widget {
 						}
 					?>
 				</ul>
-
-				<header>
-					<h3>Promotions Are:</h3>
-					<?php
-						$query = array();
-						//$query['promote_on'] = 'brownstoner_basic';
-						$promoted = new Promoted();
-
-						if ( $promoted->call() === True ){
-							$results = $promoted->getData();
-							$businesses = $results['data'];
-							//var_dump($businesses);
-						}
-					?>
-				</header>
 			</div>
 
 		<?php echo $after_widget;
