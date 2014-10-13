@@ -348,7 +348,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 					} ?>
 				<?php if($seeMore){?>
 					<a href="<?php echo $seeMore;?>" class="widget-see-more--bottom">
-						<span class="content"> See More Places To Eat</span>
+						<span class="content"> See More </span>
 						<i class="icon-chevron-right"></i>
 					</a>
 				<?php } ?>

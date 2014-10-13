@@ -13,10 +13,7 @@
 		$utm_campaign = 'pages_widget';
 
 		if ( $business['promote_on'] ){
-		  foreach ($business['promote_on'] as $promotion) {
-		    $utm_content .= $promotion . ',';
-		  }
-		  $utm_content = rtrim( $utm_content, ",");
+			$utm_content = implode(',', $business['promote_on']);
 		}
 
 		$url .= '&utm_medium=' . $utm_medium .
