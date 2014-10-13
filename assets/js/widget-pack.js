@@ -10,17 +10,17 @@
 		nextText: ""
 	});
 
-	j('.show-categories').on('click', function(){
-		if ( j('.category-nav').is(':visible') ){
-			j('.show-categories').find('span').text('Show Categories');
-			j('.show-categories').find('i').attr('class', 'icon-plus');
-			j('.category-nav').slideUp();
-		} else {
-			j('.show-categories').find('span').text('Hide Categories');
-			j('.show-categories').find('i').attr('class', 'icon-minus');
-			j('.category-nav').slideDown(); 
-		}
-	});
+	// j('.show-categories').on('click', function(){
+	// 	if ( j('.category-nav').is(':visible') ){
+	// 		j('.show-categories').find('span').text('Show Categories');
+	// 		j('.show-categories').find('i').attr('class', 'icon-plus');
+	// 		j('.category-nav').slideUp();
+	// 	} else {
+	// 		j('.show-categories').find('span').text('Hide Categories');
+	// 		j('.show-categories').find('i').attr('class', 'icon-minus');
+	// 		j('.category-nav').slideDown(); 
+	// 	}
+	// });
 
 	/*
 	*		Category Cards
@@ -39,7 +39,7 @@
 		}
 	});
 
-	j('.mobile-categories-trigger').on('touchstart, click', function(e){
+	j('.mobile-categories-trigger').on('touchstart', function(e){
 		e.preventDefault();
 		e.stopPropagation();
 

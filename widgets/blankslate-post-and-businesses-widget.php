@@ -16,6 +16,21 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 		$this->WP_Widget('BlankSlateDirectoryPostAndBusinessesWidget', 'BlankSlate Directory Post and Businesses', $widget_ops);
 	}
 
+	function ShowLevels($levels, $selected){
+			?>
+			<option value="" id="all-levels" <?php echo empty($selected) ? 'selected="selected"' : '' ?>>All</option> 
+			<?php			
+			foreach ($levels as $level) { ?>
+						<option 
+							value="<?= $level['key'] ?>" 
+							id="<?= $level['key'] ?>"
+							<?php echo $selected == $level['key'] ? 'selected="selected"' : '' ?>
+						>
+								<?= $level['name'] ?>
+						</option>
+			<?php } 
+	}
+
 	function form($instance) {
 		$instance = wp_parse_args( (array) $instance, array( 'title' => '' ) );
 		?>
@@ -36,17 +51,6 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 		  </label>
 		</p>
 		<hr>
-		</p>
-			<label>Categories: 
-			<?php
-				
-				$ls_cat_tree = blankslate_get_categories();
-				$cat_html = blankslate_print_widget_cats( $ls_cat_tree[0]['children'], 'none', $instance, 0, $this );
-				echo $cat_html;
-
-			?>
-			<a href="javascript:(void);" class="ls-expand-cats">Expand All</a> 
-		</p>
 		<p>
 		  <label for="<?=$this->get_field_id('address'); ?>">Address:
 			<input class="widefat" id="<?=$this->get_field_id('address'); ?>" name="<?=$this->get_field_name('address'); ?>" type="text" value="<?=$instance['address'];?>" />
@@ -58,22 +62,30 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 		  </label>
 		</p>
 		<p>
-			<?php if ($instance['layout'] == 'left'): ?>
-			<label for="<?=$this->get_field_id('left'); ?>">Left: 
-			<input type="radio" name="<?=$this->get_field_name('layout'); ?>" value="left" id="<?=$this->get_field_id('left');?>" checked/>
-			<label for="<?=$this->get_field_id('right'); ?>">Right:  
-			<input type="radio" name="<?=$this->get_field_name('layout'); ?>" value="right" id="<?=$this->get_field_id('right');?>" /> 
-			<?php else: ?>
-			<label for="<?=$this->get_field_id('left'); ?>">Left: 
-			<input type="radio" name="<?=$this->get_field_name('layout'); ?>" value="left" id="<?=$this->get_field_id('left');?>"/>
-			<label for="<?=$this->get_field_id('right'); ?>">Right:  
-			<input type="radio" name="<?=$this->get_field_name('layout'); ?>" value="right" id="<?=$this->get_field_id('right');?>" checked/>  
-			<?php endif; ?>
+			<label for="<?=$this->get_field_id('layout'); ?>"> Post on Left or Right: </label>
+			<select name="<?=$this->get_field_name('layout'); ?>" id="<?=$this->get_field_id('layout');?>">
+				<option value="left"  <?=($instance['layout'] == 'left')  ? ' selected="selected"' : '' ?>>Left</option>
+				<option value="right" <?=($instance['layout'] == 'right') ? ' selected="selected"' : '' ?>>Right</option>
+			</select>
 		</p>
 
+		<?php
+			$promotions = new Promotions();
+			if( $promotions->call() === True ){
+				$results = $promotions->getData();
+				$levels = $results['data'];
+			}
+		?>
+
+		<p>
+			<label for="<?= $this->get_field_id('promotion_level'); ?>"> Promotion:
+				<select name="<?= $this->get_field_name('promotion_level'); ?>" id="<?= $this->get_field_id('promotion_level'); ?>" class="widefat">
+					<?php $this->ShowLevels($levels, $instance['promotion_level']); ?>
+				</select>
+			</label>
 		</p>
 
-
+		<p>
 			<label>Categories: 
 			<?php
 				
@@ -84,6 +96,16 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 			?>
 			<a href="javascript:(void);" class="ls-expand-cats">Expand All</a> 
 		</p>
+
+		 <script type="text/javascript">
+			(function(jQuery){
+				jQuery('.expand').live('click', function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					jQuery(this).parent().next('ul').toggle();
+				});
+			}(jQuery));
+		</script>
 		
 		<?php
 	}
@@ -107,6 +129,7 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 			$instance[$field] = $new_instance[$field];
 		}
 		$instance['layout'] = esc_attr( strip_tags($new_instance['layout']) );
+		$instance['promotion_level'] = esc_attr( strip_tags($new_instance['promotion_level']) );
 
 		return $instance;
 	}
@@ -122,7 +145,9 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 
 		$keys = $instance['keys'];
 		$address = $instance['address'];
+		$layout = $instance['layout'];
 		$categories = '';
+
 		foreach ($instance as $key => $value) {
 			if ($value == 'on'){
 				$categories .= slugify($key) . ',';
@@ -130,19 +155,22 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 		}
 		$categories = rtrim($categories, ',');
 		
-		$layout = $instance['layout'];
+		$query = array();
+		$query['promote_on'] = $instance['promotion_level'];
+		$query['cat'] = $categories;
 
 		if ($address) {
 			$addressArray = blankslate_get_lat_lng($address);
 			$lat = $addressArray['lat'];
 			$lng = $addressArray['lon'];
+			$query['lat'] = $lat;
+			$query['lng'] = $lng;
 		}
 
 		if ($keys != '') {
-			$queryParameters['keys'] = $keys;
+			$query['keys'] = $keys;
 		}
-
-		$queryParameters['rp'] = 12;
+		$query['rp'] = 12;
 
 		echo $before_widget;
 		?>
@@ -197,13 +225,17 @@ class BlankSlateDirectoryPostAndBusinessesWidget extends WP_Widget {
 
 				<div class="businesses">
 					<?php
-						$query = array();
-						$query['promote_on'] = 'brownstoner_basic';
-						$query['cat'] = $categories;
+
 						$promoted = new Promoted(null, $query);
 						if( $promoted->call() === True ){
 							$results = $promoted->getData();
 							$businesses = $results['data'];
+						} else {
+							$featured = new SearchResults(null, $query);
+							if( $featured->call() === True ){
+								$results = $featured->getData();
+								$businesses = $results['data'];
+							}
 						}
 					?>
 						
