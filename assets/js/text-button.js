@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
 	//Takes pathname of url, returns key
 	var parseIt = function( path ){
@@ -40,8 +42,8 @@
 					},
 					{
 						type: 'textbox',
-						name: 'utm_content',
-						label: 'UTM Content'
+						name: 'trackingId',
+						label: 'Tracking ID'
 					}],
 					onsubmit: function( e ) {
 						var id = e.data.id;
@@ -66,8 +68,7 @@
 						//slice off last ,
 						keyString = keyString.slice( 0,-1 );
 
-						editor.insertContent( 
-							'[blankslate_pages id="' + keyString + '" type="' + e.data.type + '" show_photo="' + e.data.show_photo + '" utm_content="' + e.data.utm_content + '"][/blankslate_pages]');
+						editor.insertContent( '[blankslate_pages id="' + keyString + '" type="' + e.data.type + '" show_photo="' + e.data.show_photo + '" tracking_id="' + e.data.trackingId + '"][/blankslate_pages]');
 					}
 				});
 			}

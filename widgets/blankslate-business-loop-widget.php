@@ -4,9 +4,6 @@ Plugin Name: BlankSlate Directory Business Loop
 Description: Searches for and displays four businesses based on criteria
 Author: Blankslate (DH)
 Version: 1.0.0
-
-Deprecated, use pattern loop widget
-
 */
 
 class BlankSlateDirectoryBusinessLoopWidget extends WP_Widget {

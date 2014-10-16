@@ -11,6 +11,7 @@ class ShortcodeBusiness {
   public $photo;
   public $content;
   public $categories;
+  public $tracking_id;
 
   /**
    * [__construct description]
@@ -26,7 +27,7 @@ class ShortcodeBusiness {
    * @param str $content
    * @param array $categories
    */
-  public function __construct($id, $name, $display_address, $city, $state, $zip, $about, $url, $photo, $content = null, $categories, $utm_content, $utm_campaign, $utm_medium, $utm_source ){
+  public function __construct($id, $name, $display_address, $city, $state, $zip, $about, $url, $photo, $content = null, $categories, $tracking_id ){
     $this->id                 = $id;
     $this->name               = $name;
     $this->display_address    = $display_address;
@@ -37,16 +38,13 @@ class ShortcodeBusiness {
     $this->photo              = $photo;
     $this->content            = $content;
     $this->categories         = $categories;
-    $this->utm_content        = $utm_content;
-    $this->utm_campaign       = $utm_campaign;
-    $this->utm_medium         = $utm_medium;
-    $this->utm_source         = $utm_source;
+    $this->tracking_id         = $tracking_id;
 
-    $this->url = $url . 
-                "&utm_medium="    . $this->utm_medium .
-                "&utm_source="    . $this->utm_source .
-                "&utm_campaign="  . $this->utm_campaign .
-                ($this->utm_content ? ("&utm_content=" . $this->utm_content) : '');
+    if ( $this->tracking_id ) {
+      $this->url = $url . "&utm_campaign=" . $this->tracking_id;
+    } else {
+      $this->url = $url;
+    }
   }
 
   /**
