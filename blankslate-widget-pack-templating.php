@@ -145,7 +145,9 @@ function print_business($business, $width, $height){
   echo    '</div>';
   echo    '<div class="info-hold">';
   echo      '<span class="name">' . $business['business_name'] . '</span>';
-  echo      '<span class="category">' . end($business['categories']) . '</span>';
+  if ( $business['categories'] ){
+    echo      '<span class="category">' . end($business['categories']) . '</span>';
+  }
   echo      '<p>' . $business['about'] . '</p>';
   echo    '</div>';
   echo '</a>';

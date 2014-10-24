@@ -164,7 +164,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 		<button id="add-key">Add Key</button>
 		<button id="delete-key">Delete Key</button>
 
-		<input class="widefat" id="<?=$this->get_field_id('key-length'); ?>" name="<?=$this->get_field_name('key-length'); ?>" type="hidden" value="<?= $instance['key-length'] ? $instance['key-length'] : 1 ;?>" />
+		<input class="widefat" id="<?=$this->get_field_id('key-length'); ?>" name="<?=$this->get_field_name('key-length'); ?>" type="hidden" value="<?= $instance['key-length'] ? $instance['key-length'] : 0 ;?>" />
 
 		<script type="text/javascript">
 			(function(jQuery){
@@ -197,8 +197,11 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 				jQuery('#delete-key').on('click', function(){
 					var keyLengthSelector = "<?=$this->get_field_id('key-length'); ?>";
 					var keyLength = jQuery('#' + keyLengthSelector).val();
-					jQuery('.keys p:last').remove();
-					jQuery('#' + keyLengthSelector).val(+keyLength - 1);
+
+					if ( keyLength > 0 ){
+						jQuery('.keys p:last').remove();
+						jQuery('#' + keyLengthSelector).val(+keyLength - 1);
+					}
 				});
 			}(jQuery));
 		</script>
@@ -318,12 +321,23 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 					$key_string = implode(',', $key_array);
 
 					$patterns = array( 'loop_one_three', 'loop_six', 'loop_three_one', 'loop_two',  'loop_large_small', 'loop_four');
+					$businesses = array();
 
 					//Return arrays of businesses on different promotion levels
 					$query = array();
 					$query['cat'] = $categories;
 					$query['promote_on'] = $smallLevel;
-					$query['keys'] = $key_string;
+
+					if ( count($key_array) > 0 ){
+						$keyquery = array();
+						$keyquery['keys'] = $key_string;
+						$featured = new SearchResults(null, $keyquery);
+
+						if( $featured->call() === true ){
+							$results = $featured->getData();
+							$businesses = array_merge($businesses, $results['data']);
+						}
+					}
 					
 					$query['lat'] = $lat;
 					$query['lng'] = $lng;
@@ -336,11 +350,12 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 						$query['content_score'] = $content_score;
 					}
 					
-					if ( !empty($query['promote_on']) ){ // If promotion selected, use Promotions API
+					// If promotion selected, use Promotions API
+					if ( !empty($query['promote_on']) ){
 						$promoted = new Promoted(null, $query);
 						if( $promoted->call() === True ){
 							$results = $promoted->getData();
-							$businesses = $results['data'];
+							$businesses = array_merge($businesses, $results['data']);
 						}
 
 						if ( $different ){
@@ -390,12 +405,15 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 								}
 							}
 						}
-					} else { //Use Search API
+					//Use Search API if no promotions are selected
+					} else { 
+
+
 						$featured = new SearchResults(null, $query);
 
 						if( $featured->call() === true ){
 							$results = $featured->getData();
-							$businesses = $results['data'];
+							$businesses = array_merge($businesses, $results['data']);
 						}
 
 						$i = 0;

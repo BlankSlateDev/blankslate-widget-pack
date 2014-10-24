@@ -107,9 +107,6 @@ class BlankSlateDirectoryBlogrollWidget extends WP_Widget {
 
 		echo $before_widget;
 		?>
-		<style type="text/css">
-
-		</style>
 
 		<div class="bs-widget-pack directory-blogroll <?= $layout ?>">
 			<header>
