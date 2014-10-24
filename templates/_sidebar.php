@@ -1,4 +1,4 @@
-<div class="sidebar-business" style="background-image:url(<?= $business['photo'] ?>);">
+<div class="sidebar-business no-overlay">
 	<?php
 		$url = $business['url'];
 
@@ -19,12 +19,24 @@
 		$url .= '&utm_medium=' . $utm_medium .
             '&utm_source=' . $utm_source .
             '&utm_campaign=' . $utm_campaign .
-            ($utm_content ? ('&utm_content=' . $utm_content) : '') . '"';
+            ($utm_content ? ('&utm_content=' . $utm_content) : '');
 	?>
-	<a href="<?= $url ?>" class="info-hold" target="_blank">
+		<?php if (strpos($business['photo'],'googleapis') !== false) { ?>
+			<a class="image-hold" href="<?= $url ?>" target="_blank" style="background-image:url(<?= BLANKSLATE_DIRECTORY_PLACEHOLDER_URL ?>);"></a>
+		<?php } else { ?>
+			<a class="image-hold" href="<?= $url ?>" target="_blank" style="background-image:url(<?= $business['photo'] ?>);"></a>
+		<?php } ?>
 		<div class="text">
-			<h4><?= shortenString( $business['business_name'], 35 )?></h4>
-			<h5><?= end($business['categories']) ?></h5>
+			<a href="<?= $url ?>" target="_blank">
+				<span class="category"><?= end($business['categories']) ?></span>
+				<span class="name"><?= shortenString( $business['business_name'], 35 )?></span>
+			</a>
+			<a href="<?= $url ?>/#tabs-location" target="_blank">
+				<span class="neighborhood"> <?= $business['neighborhood'] ?> </span>
+				<?php if ( $business['display_address'] ){ ?>
+				<span class="address"><i class="icon-location"></i><?= $business['display_address'] ?> </span>
+				<?php } ?>
+			</a>
 		</div>
 	</a>
 </div>

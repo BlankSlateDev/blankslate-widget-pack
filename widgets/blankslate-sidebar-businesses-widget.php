@@ -33,9 +33,46 @@ class BlankSlateDirectorySidebarBusinesses extends WP_Widget {
 		  </label>
 		</p>
 		<p>
+		  <label for="<?=$this->get_field_id('see_more_text'); ?>">See More Text:
+			<input class="widefat" id="<?=$this->get_field_id('see_more_text'); ?>" name="<?=$this->get_field_name('see_more_text'); ?>" type="text" 
+					value="<?= $instance['see_more_text'] ? $instance['see_more_text'] : 'See More' ?>" />
+		  </label>
+		</p>
+		<p>
+		  <label for="<?=$this->get_field_id('see_more_link'); ?>">See More Link:
+			<input class="widefat" id="<?=$this->get_field_id('see_more_link'); ?>" name="<?=$this->get_field_name('see_more_link'); ?>" type="text" value="<?=$instance['see_more_link'];?>" />
+		  </label>
+		</p>
+		<p>
 		  <label for="<?=$this->get_field_id('numRows'); ?>"> Number of Rows: 
 			<input class="widefat" id="<?=$this->get_field_id('numRows'); ?>" name="<?=$this->get_field_name('numRows'); ?>" type="text" value="<?=$instance['numRows'];?>" />
 		  </label>
+		</p>
+
+		<p>
+			<label for="<?= $this->get_field_id('layout_style'); ?>">Layout Style:
+				<select name="<?= $this->get_field_name('layout_style'); ?>" id="<?= $this->get_field_id('layout_style'); ?>" class="widefat">
+					<option value="overlay" id="overlay" <?php echo $instance['layout_style'] == 'overlay' ? 'selected="selected"' : '' ?>>
+						Overlay display, text on top of image.
+					</option>
+					<option value="card" id="card" <?php echo $instance['layout_style'] == 'card' ? 'selected="selected"' : '' ?>>
+						Card display, image and text separate.
+					</option>
+				</select>
+			</label>
+		</p>
+
+		<p>
+			<label for="<?= $this->get_field_id('placement'); ?>">Placement:
+				<select name="<?= $this->get_field_name('placement'); ?>" id="<?= $this->get_field_id('placement'); ?>" class="widefat">
+					<option value="blankslate-sidebar-aside" id="blankslate-sidebar-aside" <?php echo $instance['placement'] == 'blankslate-sidebar-aside' ? 'selected="selected"' : '' ?>>
+						Aside display, for placement in right column.
+					</option>
+					<option value="blankslate-sidebar-article" id="blankslate-sidebar-article" <?php echo $instance['placement'] == 'blankslate-sidebar-article' ? 'selected="selected"' : '' ?>>
+						Article display, for placement under a post.
+					</option>
+				</select>
+			</label>
 		</p>
 
 		<?php
@@ -89,10 +126,14 @@ class BlankSlateDirectorySidebarBusinesses extends WP_Widget {
 		}
 
 		$instance = $old_instance;
-		$instance['title'] = esc_attr( strip_tags($new_instance['title']) );
-		$instance['url'] = $new_instance['url'];
-		$instance['numRows'] = esc_attr( strip_tags($new_instance['numRows']) );
-		$instance['promo_level'] = esc_attr( strip_tags($new_instance['promo_level']) );
+		$instance['title'] 					= esc_attr( strip_tags($new_instance['title']) );
+		$instance['url'] 						= esc_url($new_instance['url']);
+		$instance['see_more_text'] 	= esc_textarea($new_instance['see_more_text']);
+		$instance['see_more_link'] 	= esc_url($new_instance['see_more_link']);
+		$instance['numRows'] 				= esc_attr( strip_tags($new_instance['numRows']) );
+		$instance['promo_level'] 		= esc_attr( strip_tags($new_instance['promo_level']) );
+		$instance['layout_style'] 	= $new_instance['layout_style'];
+		$instance['placement'] 	= $new_instance['placement'];
 
 		foreach ($fields as $field) {
 			$instance[$field] = $new_instance[$field];
@@ -132,13 +173,20 @@ class BlankSlateDirectorySidebarBusinesses extends WP_Widget {
 
 		echo $before_widget; ?>
 
-			<div class="bs-widget-pack sidebar-businesses">
+			<div id="<?= $instance['placement'] ? $instance['placement'] : 'blankslate-sidebar-aside' ?>" class="bs-widget-pack sidebar-businesses">
 				<?php if($instance['title']): ?>
 					<header>
 						<?php if ( $instance['url'] ){ ?>
 						<h3><a href="<?= $instance['url'] ?>"><?= $instance['title'] ?></a></h3>
 						<?php } else { ?>
 						<h3><?= $instance['title'] ?></h3>
+						<?php } ?>
+
+						<?php if ( $instance['see_more_link'] ) { ?>
+							<a class="see-more" href="<?= $instance['see_more_link'] ?>">
+								<span><?= $instance['see_more_text'] ?></span>
+								<i class="icon-chevron-right"></i>
+							</a>
 						<?php } ?>
 					</header>
 				<?php endif; ?>
@@ -160,7 +208,19 @@ class BlankSlateDirectorySidebarBusinesses extends WP_Widget {
 				<?php for ($i = 0; $i < ($numRows * 2); $i ++){
 					$business = current($businesses);
 					next($businesses);
-					include(BLANKSLATE_WIDGET_PACK_DIR.'/templates/_sidebar.php');
+
+					switch ( $instance['layout_style'] ) {
+						case 'overlay':
+							include(BLANKSLATE_WIDGET_PACK_DIR.'/templates/_sidebar-overlay.php');
+							break;
+						case 'card':
+							include(BLANKSLATE_WIDGET_PACK_DIR.'/templates/_sidebar.php');
+							break;
+						default:
+							include(BLANKSLATE_WIDGET_PACK_DIR.'/templates/_sidebar.php');
+							break;
+					}
+					
 				} ?>
 			</div>
 

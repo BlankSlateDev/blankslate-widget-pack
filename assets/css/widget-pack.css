@@ -1,14 +1,123 @@
+/*
+Searching, move into site specific styles
+ */
+
+/* Hide mi away and filter */
+#blankslate-container #blankslate-list-results ul.blankslate-results-list li .distance,
+#blankslate-container #blankslate-filter-container {
+	display: none;
+}
+
+#blankslate-container .blankslate-sidebar-widgets {
+    margin-top: 5px;
+}
+
+a.blankslate-sort[sort=distance] {
+display: none;
+}
+
+#blankslate-container .header-widget a,
+#blankslate-container #blankslate-categories {
+	display: none;
+}
+
+#blankslate-sidebar-article.sidebar-businesses header .see-more,
+#blankslate-sidebar-aside.sidebar-businesses header .see-more {
+	font: 500 15px 'Oswald', serif;
+}
+
+#blankslate-sidebar-article.bs-widget-pack.sidebar-businesses h3 a,
+#blankslate-sidebar-aside.bs-widget-pack.sidebar-businesses h3 a,
+#blankslate-sidebar-article.bs-widget-pack.sidebar-businesses h3,
+#blankslate-sidebar-aside.bs-widget-pack.sidebar-businesses h3 {
+	font: 300 22px 'Oswald', serif;
+}
+
+#pg-25126-0, .panel-grid-cell .panel {
+	margin-bottom: 0 !important;
+}
+
+.directory-title {
+	font: 300 30px 'Oswald';
+}
+
+.panel .social-network-wrapper {
+text-align: right;
+float: right;
+padding: 0 0 10px;
+}
+
+#blankslate-searchform {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 0;
+	background: #eee;
+	margin-bottom: 20px;
+}
+
+.mobile-search-trigger,
+.mobile-search-cancel {
+	display: none;
+}
+
+#blankslate-searchform  .title-hold a {
+	color: #000;
+	font: 300 22px 'Oswald';
+}
+
+#blankslate-searchform .mobile-search {
+	display: flex;
+	align-items: center;
+	margin-left: 12px;
+}
+
+#blankslate-searchform .mobile-search .where-hold {
+	display: none;
+}
+
+#blankslate-searchform #blankslate-what.blankslate-whatbox {
+	background: #fff;
+	margin: 0;
+	padding: 0 18px;
+	font: 300 20px 'Source Sans Pro', sans-serif;
+	color: #000;
+	font-style: italic;
+	width: 300px;
+	height: 40px;
+	box-shadow: none;
+	border: 1px solid grey;
+}
+
+#blankslate-searchform #blankslate-search {
+	background: linear-gradient(#666,#000 95%);
+	border-radius: 0;
+	height: 42px;
+	padding: 0 12px;
+	font: 300 20px 'Source Sans Pro', sans-serif;
+}
+
+#blankslate-searchform #blankslate-search:hover {
+	background: #000;
+	font: 300 20px 'Source Sans Pro', sans-serif;
+}
+
+.search-form.show-categories {
+	display: none;
+}
+
+
 .panel-grid-cell .panel.widget_blankslateherounitwidget {
 	margin-bottom: 0;
 }
 
 #neighborhood-widget .neighborhood_list .neighborhood-hold .content-hold {
 	background: #092334;
-color: #fff;
-font: 300 1.1em 'Source Sans Pro';
-bottom: 0;
-width: 100%;
-position: absolute;
+	color: #fff;
+	font: 300 1.1em 'Source Sans Pro';
+	bottom: 0;
+	width: 100%;
+	position: absolute;
 }
 
 #neighborhood-widget .neighborhood_list {
@@ -23,6 +132,17 @@ position: absolute;
 	margin: 0;
 	color: #fff;
 	list-style: none;
+}
+
+@media ( max-width: 600px ){
+	#blankslate-searchform {
+		flex-direction: column;
+		overflow: auto;
+	}
+
+	#blankslate-searchform #blankslate-what.blankslate-whatbox {
+		width: 150px;
+	}
 }
 
 /*
@@ -1256,7 +1376,7 @@ float: right;
 			width: 50%;
 		}
 
-	.pattern-loop .widget-see-more--bottom {
+	.bs-widget-pack .widget-see-more--bottom {
 		color: #000;
 		border: 3px solid #000;
 		font: 600 18px/16px 'Source Sans Pro', sans-serif;
@@ -1283,16 +1403,20 @@ float: right;
 		-ms-align-items: center;
 		align-items: center;
 	}
-	.pattern-loop .widget-see-more--bottom .content {
+	.bs-widget-pack .widget-see-more--bottom:hover {
+		background: #000;
+		color: #fff;
+	}
+
+	.bs-widget-pack .widget-see-more--bottom .content {
 		padding-right: 12px;
 	}
 	
-	.pattern-loop .icon-chevron-right {
+	.bs-widget-pack .icon-chevron-right {
 		display: inline-block;
-		vertical-align: text-bottom;
 	}
 
-	.pattern-loop .icon-chevron-right:before {
+	.bs-widget-pack .icon-chevron-right:before {
 		font-family: 'fontAwesome';
 	}
 		
@@ -1413,8 +1537,14 @@ float: right;
 *
 *****************************************************************************************************/
 
-.BlankSlateDirectorySidebarBusinesses {
-	max-width: 300px;
+#blankslate-container .bs-widget-pack.sidebar-businesses a i {
+	margin-left: -1px;
+}
+
+.bs-widget-pack.sidebar-businesses {
+	width: 300px;
+	overflow: auto;
+	margin: 0 auto;
 }
 
 .sidebar-businesses .sidebar-business {
@@ -1474,6 +1604,286 @@ float: right;
 .sidebar-businesses header h3 a:hover,
 .sidebar-businesses header h3 a:active {
 	color: #fff;
+}
+
+/*  No Overlay */
+
+.sidebar-businesses .sidebar-business.no-overlay {
+	width: 145px;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+}
+
+.sidebar-businesses .sidebar-business.no-overlay:hover {
+	border-color: black;
+}
+
+.sidebar-businesses .sidebar-business.no-overlay:nth-of-type(2n) {
+	width: 145px;
+	margin-right: 0;
+}
+
+.sidebar-business.no-overlay {
+	height: auto;
+}
+
+.sidebar-business.no-overlay img {
+	float: left;
+	border-bottom: 1px solid #fff;
+}
+
+.sidebar-business.no-overlay .text {
+	background: #eaeaea;
+	padding: 10px;
+	display: block;
+	float: left;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.sidebar-business.no-overlay .text > a span,
+.sidebar-business.no-overlay .text > a {
+	display: block;
+}
+
+.sidebar-business.no-overlay .text .name {
+	font: 600 14px/16px 'Oswald', serif;
+	height: 35px;
+}
+
+.sidebar-business.no-overlay .text .neighborhood,
+.sidebar-business.no-overlay .text .category,
+.sidebar-business.no-overlay .text .address {
+	font: 500 12px 'Source Sans Pro', sans-serif;
+	height: 15px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-transform: capitalize;
+}
+
+.sidebar-business.no-overlay .image-hold {
+	height: 108px;
+	display: block;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	width: 100%;
+	background-position: 50%;
+	border-bottom: 1px solid #fff;
+}
+
+.sidebar-business.no-overlay a:hover {
+	text-decoration: none;
+}
+
+/* Header */
+
+.sidebar-businesses header i {
+	font-family: 'FontAwesome';
+	color: #aaa;
+}
+
+
+	#blankslate-sidebar-article.sidebar-businesses header .see-more,
+	#blankslate-sidebar-aside.sidebar-businesses header .see-more {
+		float: right;
+	}
+	
+	#blankslate-sidebar-aside.sidebar-businesses header .see-more {
+		margin-top: 6px;
+	}
+
+	#blankslate-sidebar-article.bs-widget-pack.sidebar-businesses h3,
+	#blankslate-sidebar-aside.bs-widget-pack.sidebar-businesses h3 {
+		underline: none;
+		border: none;
+		padding: 0;
+		text-transform: capitalize;
+		background: none;
+		text-shadow: none;
+		color: #000;
+	}
+
+	#blankslate-sidebar-article.bs-widget-pack.sidebar-businesses a,
+	#blankslate-sidebar-aside.bs-widget-pack.sidebar-businesses a {
+		color: #000;
+	}
+
+	/*
+	*		Article Placement
+	 */
+
+	#article-wrapper .BlankSlateDirectorySidebarBusinesses {
+		box-shadow: none;
+		border: none;
+		width: 100%;
+	}
+
+	#blankslate-sidebar-article.bs-widget-pack.sidebar-businesses {
+		margin: 12px 0 0;
+		width: 100%;
+	}
+
+	#blankslate-sidebar-article.sidebar-businesses .sidebar-business.no-overlay {
+		width: 49%;
+		margin-bottom: 10px;
+		margin-right: 2%;
+		border: 1px solid #ccc;
+		box-sizing: border-box;
+		max-width: 320px;
+		float: left;
+	}
+
+	#blankslate-sidebar-article.sidebar-businesses .sidebar-business.no-overlay:hover {
+		border-color: #000;
+	}
+
+	#blankslate-sidebar-article.sidebar-businesses .sidebar-business.no-overlay:nth-of-type(2n) {
+		width: 49%;
+		margin-right: 0;
+		max-width: 320px;
+		float: left;
+	}
+
+	#blankslate-sidebar-article .sidebar-business.no-overlay .image-hold {
+		width: 50%;
+		float: left;
+		display: inline-block;
+		border-bottom: none;
+		border-right: 1px solid #FFF;
+		box-sizing: border-box;
+	}
+
+	#blankslate-sidebar-article .sidebar-business.no-overlay .text {
+		float: left;
+		width: 50%;
+		display: inline-block;
+		height: 108px;
+	}
+
+	@media (max-width: 600px){
+		#blankslate-sidebar-article.sidebar-businesses header {
+			padding: 0 10px;
+		}
+
+		#blankslate-sidebar-article .sidebar-business.no-overlay .image-hold {
+			height: 120px;
+		}
+		
+		#blankslate-sidebar-article .sidebar-business.no-overlay .text {
+			height: 120px;
+		}
+
+		#blankslate-sidebar-article.sidebar-businesses .sidebar-business.no-overlay,
+		#blankslate-sidebar-article.sidebar-businesses .sidebar-business.no-overlay:nth-of-type(2n) {
+			width: 90%;
+			margin: 0 auto 10px;
+			float: none;
+			overflow: auto;
+			max-width: none;
+		}
+	}
+
+
+/*****************************************************************************************************
+*
+*		Tile Template
+*
+*****************************************************************************************************/
+
+.blankslate-tile  {
+	width: 25%;
+	padding: 8px;
+	box-sizing: border-box;
+}
+
+@media (max-width: 1024px){
+	.blankslate-tile  {
+		width: 33.33%;
+	}
+}
+
+@media (max-width: 600px){
+	.blankslate-tile  {
+		width: 50%;
+		padding: 5px;
+	}
+}
+
+.blankslate-tile .content-hold {
+	border: 1px solid #ececec;
+	overflow: auto;
+	-webkit-box-shadow: 0px 0px 7px 0px rgba(204,204,204,1);
+	-moz-box-shadow: 0px 0px 7px 0px rgba(204,204,204,1);
+	box-shadow: 0px 0px 7px 0px rgba(204,204,204,1);
+}
+
+.blankslate-tile .content-hold:hover {
+	border-color: black;
+}
+
+.blankslate-tile img {
+	float: left;
+	border-bottom: 1px solid #fff;
+}
+
+.gutter-sizer {
+	width: 10px;
+}
+
+.blankslate-tile .text {
+	background: #fff;
+	padding: 15px;
+	display: block;
+	float: left;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.blankslate-tile .text > a span,
+.blankslate-tile .text > a {
+	display: block;
+}
+
+.blankslate-tile .text .name {
+	font: 500 16px/18px 'Oswald', serif;
+	height: 36px;
+	color: #000;
+}
+
+.blankslate-tile .text .neighborhood,
+.blankslate-tile .text .category,
+.blankslate-tile .text .address {
+	font: 300 14px 'Source Sans Pro', sans-serif;
+	height: 18px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-transform: capitalize;
+	color: #666;
+}
+
+.blankslate-tile .text .icon-location {
+	color: #000;
+}
+
+.blankslate-tile .image-hold {
+	display: block;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	width: 100%;
+	background-position: 50%;
+	border-bottom: 1px solid #fff;
+}
+
+.blankslate-tile  a:hover {
+	text-decoration: none;
 }
 
 /*****************************************************************************************************

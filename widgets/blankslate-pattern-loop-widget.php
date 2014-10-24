@@ -3,7 +3,7 @@
 Plugin Name: BlankSlate Directory Pattern Loop
 Description: Displays pattern of businesses
 Author: Blankslate (DH)
-Version: 1.0.0
+Version: 1.0.1
 */
 
 class BlankSlateDirectoryPatternLoop extends WP_Widget {
@@ -117,7 +117,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 		  </label>
 		</p>
 		<p>
-		  <label for="<?=$this->get_field_id('address'); ?>">Result Content Score (0-99):
+		  <label for="<?=$this->get_field_id('content_score'); ?>">Result Content Score (0-99):
 			<input class="widefat" id="<?=$this->get_field_id('content_score'); ?>" name="<?=$this->get_field_name('content_score'); ?>" type="text" value="<?=$instance['content_score'];?>" />
 		  </label>
 		</p>
@@ -142,13 +142,63 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 			?>
 			<a href="javascript:(void);" class="ls-expand-cats">Expand All</a> 
 		</p>
+		
+		<div class="keys">
+			<?php 
+				//Outputs number of text inputs for keys equal to key length
+				for ($i = 1; $i <= $instance['key-length']; $i ++){
+				$keyString = 'key-' . $i;
+				echo "<p>";
+				  echo "<label for=\"" . $this->get_field_id($keyString) . "\"> Key {$i} :";
+					echo "<input class=\"widefat\"
+											 id=\"" . $this->get_field_id($keyString) . "\" 
+											 name=\"" . $this->get_field_name($keyString) . "\" 
+											 type=\"text\" 
+											 value=\"" . $instance[$keyString] . "\" />";
+				  echo "</label>";
+				echo "</p>";
+			} ?>
+		</div>
+
+		
+		<button id="add-key">Add Key</button>
+		<button id="delete-key">Delete Key</button>
+
+		<input class="widefat" id="<?=$this->get_field_id('key-length'); ?>" name="<?=$this->get_field_name('key-length'); ?>" type="hidden" value="<?= $instance['key-length'] ? $instance['key-length'] : 1 ;?>" />
 
 		<script type="text/javascript">
 			(function(jQuery){
+				//Template for key input element
+				var keyTemplate = function( i ){
+					return '<p>' +
+					  '<label for="<?=$this->get_field_id("key-' + i + '"); ?>"> Key ' + i + ':' +
+						'<input class="widefat" id="<?=$this->get_field_id("key-' + i + '"); ?>" name="<?=$this->get_field_name("key-' + i + '"); ?>" type="text" value="<?=$instance["key-' + i + '"];?>" />' +
+					  '</label>' +
+					'</p>';
+				}
+					
 				jQuery('.expand').live('click', function(e){
 					e.preventDefault();
 					e.stopPropagation();
 					jQuery(this).parent().next('ul').toggle();
+				});
+
+				//On add, make new feild
+				//Increment keylength value
+				jQuery('#add-key').on('click', function(){
+					var keyLengthSelector = "<?=$this->get_field_id('key-length'); ?>";
+					var keyLength = jQuery('#' + keyLengthSelector).val();
+					jQuery('.keys').append(keyTemplate(+keyLength + 1));
+					jQuery('#' + keyLengthSelector).val(+keyLength + 1);
+				});
+
+				//On click delete, remove last item in list
+				//Decrement keylength value
+				jQuery('#delete-key').on('click', function(){
+					var keyLengthSelector = "<?=$this->get_field_id('key-length'); ?>";
+					var keyLength = jQuery('#' + keyLengthSelector).val();
+					jQuery('.keys p:last').remove();
+					jQuery('#' + keyLengthSelector).val(+keyLength - 1);
 				});
 			}(jQuery));
 		</script>
@@ -169,7 +219,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] 					= esc_attr( strip_tags($new_instance['title']) );
 		$instance['seeMore'] 				= esc_attr( strip_tags($new_instance['seeMore']) );
-		$instance['seeMoreText'] 				= esc_attr( strip_tags($new_instance['seeMoreText']) );
+		$instance['seeMoreText'] 		= esc_attr( strip_tags($new_instance['seeMoreText']) );
 		$instance['numRows'] 				= esc_attr( strip_tags($new_instance['numRows']) );
 		$instance['startOn'] 				= esc_attr( strip_tags($new_instance['startOn']) );
 		$instance['repeat'] 				= esc_attr( strip_tags($new_instance['repeat']) );
@@ -184,6 +234,13 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 
 		foreach ($fields as $field) {
 			$instance[$field] = $new_instance[$field];
+		}
+
+		$instance['key-length'] = esc_attr( strip_tags($new_instance['key-length']) );
+
+		$keys = array();
+		for ( $i = 0; $i < $instance['key-length']; $i ++){
+			$instance['key-' . $i + 1] = esc_attr( strip_tags($new_instance['key-' . $i + 1]) );
 		}
 
 		return $instance;
@@ -215,7 +272,6 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 		}
 		
 		$content_score = $instance['content_score'];
-		
 
 		$categories = '';
 		foreach ($instance as $key => $value) {
@@ -255,12 +311,19 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 				<?php endif; ?>
 
 				<?php
-					$patterns = array( 'loop_one_three', 'loop_six', 'loop_three_one', 'loop_two',  'loop_large_small', 'loop_four' );
+					$key_array = array();
+					for ( $i = 1; $i <= $instance['key-length']; $i ++){
+						array_push($key_array, $instance['key-' . $i]);
+					}
+					$key_string = implode(',', $key_array);
+
+					$patterns = array( 'loop_one_three', 'loop_six', 'loop_three_one', 'loop_two',  'loop_large_small', 'loop_four');
 
 					//Return arrays of businesses on different promotion levels
 					$query = array();
 					$query['cat'] = $categories;
 					$query['promote_on'] = $smallLevel;
+					$query['keys'] = $key_string;
 					
 					$query['lat'] = $lat;
 					$query['lng'] = $lng;
@@ -328,7 +391,6 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 							}
 						}
 					} else { //Use Search API
-						
 						$featured = new SearchResults(null, $query);
 
 						if( $featured->call() === true ){
@@ -354,7 +416,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 					} ?>
 				<?php if($seeMore && $seeMoreText ){?>
 					<a href="<?php echo $seeMore;?>" class="widget-see-more--bottom">
-						<span class="content"> <?= $seeMoreText ?> </span>
+						<span class="content"><?= $seeMoreText ?></span>
 						<i class="icon-chevron-right"></i>
 					</a>
 				<?php } ?>

@@ -1,4 +1,5 @@
 <?php
+
 function loop_two( $primary, $secondary ){
   echo '<div class="grid loop-two">';
   for ($i = 0; $i < 2; $i ++){

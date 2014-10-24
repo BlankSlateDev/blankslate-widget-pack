@@ -3,7 +3,7 @@
 /*
 Plugin Name: BlankSlate Widget Pack
 Description: Collection of Widgets to Enhance BlankSlate Directory and Publishing Tools.
-Version: 1.0.4
+Version: 1.0.46
 Author: BlankSlate (DH)
 Author URI: http://blankslate.com
 Text Domain: blankslate
@@ -28,6 +28,7 @@ require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-hero-unit-widget.php' 
 require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-pattern-loop-widget.php' );
 require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-category-cards-widget.php' );
 require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-showcase-widget.php' );
+require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-tile-businesses-widget.php' );
 
 require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-header-widget.php' );
 require( BLANKSLATE_WIDGET_PACK_DIR . 'widgets/blankslate-sidebar-businesses-widget.php' );
@@ -42,9 +43,11 @@ require( BLANKSLATE_WIDGET_PACK_DIR . 'blankslate-widget-pack-shortcode.php' );
 require( BLANKSLATE_WIDGET_PACK_DIR . 'classes/ShortcodeBusiness.php' );
 
 function widget_pack_plugin_scripts(){
-	wp_enqueue_script('widget-pack', BLANKSLATE_WIDGET_PACK_URL . 'assets/js/widget-pack.js', false, '1.81', 'all');
-	wp_enqueue_style('widget-pack', BLANKSLATE_WIDGET_PACK_URL . 'assets/css/widget-pack.css', false, '2.0.15', 'all');
-  wp_enqueue_style('icomoon', BLANKSLATE_WIDGET_PACK_URL . 'fonts/icomoon/icomoon.css', false, '1.0.6', 'all');
+	wp_enqueue_script('widget-pack-script', BLANKSLATE_WIDGET_PACK_URL . 'assets/js/widget-pack.js', false, '1.81', 'all');
+	wp_enqueue_script('widget-pack-masonry', BLANKSLATE_WIDGET_PACK_URL . 'lib/masonry/masonry.min.js', false, '3.1.5', 'all');
+	wp_enqueue_script('widget-pack-imagesLoaded', BLANKSLATE_WIDGET_PACK_URL . 'lib/imagesLoaded/imagesLoaded.min.js', false, '3.1.8', 'all');
+	wp_enqueue_style('widget-pack-style', BLANKSLATE_WIDGET_PACK_URL . 'assets/css/widget-pack.css', false, '2.0.16', 'all');
+  wp_enqueue_style('widget-pack-icomoon', BLANKSLATE_WIDGET_PACK_URL . 'fonts/icomoon/icomoon.css', false, '1.0.6', 'all');
 }
 add_action('wp_enqueue_scripts','widget_pack_plugin_scripts');
 add_action('admin_enqueue_scripts', 'widget_pack_plugin_scripts');
