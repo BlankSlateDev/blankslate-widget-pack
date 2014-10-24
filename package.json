@@ -1,0 +1,16 @@
+{
+  "name": "BlankSlate-Widget-Pack",
+  "version": "1.0.0",
+  "description": "Collection of widgets and such for BlankSlate Directory",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DRH",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-debug": "^1.0.1",
+    "gulp-sftp": "0.1.3"
+  }
+}

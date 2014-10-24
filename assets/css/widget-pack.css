@@ -1,4 +1,5 @@
 /*
+<<<<<<< HEAD
 Searching, move into site specific styles
  */
 
@@ -107,6 +108,11 @@ padding: 0 0 10px;
 }
 
 
+=======
+* CSS
+ */
+
+>>>>>>> 055f10d13eb4e793fed4075db740d8e84049be88
 .panel-grid-cell .panel.widget_blankslateherounitwidget {
 	margin-bottom: 0;
 }

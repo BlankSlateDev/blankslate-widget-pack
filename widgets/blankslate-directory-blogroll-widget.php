@@ -163,7 +163,9 @@ class BlankSlateDirectoryBlogrollWidget extends WP_Widget {
 							</a>
 						</div>
 						<div class="content">
-							<?php the_title('<h2>','</h2>'); ?>
+							<a href="<?= the_permalink() ?>">
+								<?php the_title('<h2>','</h2>'); ?>
+							</a>
 							<?php the_excerpt(); ?>
 						</div>
 					</li>
