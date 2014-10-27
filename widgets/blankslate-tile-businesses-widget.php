@@ -235,7 +235,7 @@ class BlankSlateDirectoryTiledBusinesses extends WP_Widget {
 						foreach( $businesses as $business ){
 							include(BLANKSLATE_WIDGET_PACK_DIR.'/templates/_tile.php');
 						}
-
+						
 						echo '</div>';
 					} ?>
 				<?php if($seeMore && $seeMoreText ){?>
