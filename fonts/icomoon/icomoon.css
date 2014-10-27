@@ -9,7 +9,8 @@
 	font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+.bs-widget-pack [class^="icon-"],
+.bs-widget-pack [class*=" icon-"] {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
