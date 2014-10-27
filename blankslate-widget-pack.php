@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
 /*
 Plugin Name: BlankSlate Widget Pack
 Description: Collection of Widgets to Enhance BlankSlate Directory and Publishing Tools.

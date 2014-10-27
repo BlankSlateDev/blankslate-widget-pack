@@ -195,14 +195,13 @@ class BlankSlateDirectoryTiledBusinesses extends WP_Widget {
 					$query = array();
 					$query['cat'] = $categories;
 					$query['promote_on'] = $instance['promo_level'];
-					if( $lat && $lng ){
+					if( isset($lat) && isset($lng) ){
 						$query['lat'] = $lat;
 						$query['lng'] = $lng;
 					}
 					$query['sort'] = $sortBy;
 					$query['rp'] = $instance['business_count'];
 
-					
 					if(!empty($content_score) && $content_score > 0 && !$instance['promo_level']){
 						$query['content_score'] = $content_score;
 					}
@@ -214,18 +213,14 @@ class BlankSlateDirectoryTiledBusinesses extends WP_Widget {
 							$results = $promoted->getData();
 							$businesses = $results['data'];
 						}
-						$i = 0;
 
 						echo '<div id="blankslate-tile-container">';
 						echo '<div class="gutter-sizer"></div>';
-						while ($i < $instance['business_count']) {
-							$business = current($businesses);
-							if ( $business ){
-								next($businesses);
-								include(BLANKSLATE_WIDGET_PACK_DIR.'/templates/_tile.php');
-							}
-								$i += 1;
+
+						foreach( $businesses as $business ){
+							include(BLANKSLATE_WIDGET_PACK_DIR.'/templates/_tile.php');
 						}
+
 						echo '</div>';?>
 						
 						<?php
@@ -235,15 +230,12 @@ class BlankSlateDirectoryTiledBusinesses extends WP_Widget {
 							$results = $featured->getData();
 							$businesses = $results['data'];
 						}
-						$i = 0;
 
 						echo '<div id="blankslate-tile-container">';
-						while ($i < $instance['business_count']) {
-							$business = current($businesses);
-							next($businesses);
+						foreach( $businesses as $business ){
 							include(BLANKSLATE_WIDGET_PACK_DIR.'/templates/_tile.php');
-							$i += 1;
 						}
+
 						echo '</div>';
 					} ?>
 				<?php if($seeMore && $seeMoreText ){?>
