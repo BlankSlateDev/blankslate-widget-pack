@@ -168,7 +168,6 @@ class BlankSlateDirectoryTiledBusinesses extends WP_Widget {
 		}
 		
 		$content_score = $instance['content_score'];
-		
 
 		$categories = '';
 		foreach ($instance as $key => $value) {
@@ -204,7 +203,7 @@ class BlankSlateDirectoryTiledBusinesses extends WP_Widget {
 					$query['rp'] = $instance['business_count'];
 
 					
-					if(!empty($content_score) && $content_score > 0 ){
+					if(!empty($content_score) && $content_score > 0 && !$instance['promo_level']){
 						$query['content_score'] = $content_score;
 					}
 					// If promotion selected, use Promotions API
@@ -273,7 +272,7 @@ class BlankSlateDirectoryTiledBusinesses extends WP_Widget {
 
 					var $container = jQuery('#blankslate-tile-container');
 
-					jQuery('.blankslate-tile').hide();
+					//jQuery('.blankslate-tile').hide();
 
 					jQuery('.blankslate-tile img[data-lazy-src]').each( function(){
 						lazy( this );
@@ -281,7 +280,7 @@ class BlankSlateDirectoryTiledBusinesses extends WP_Widget {
 
 					// initialize
 					$container.imagesLoaded( function() {
-						jQuery('.blankslate-tile').fadeIn();
+						//jQuery('.blankslate-tile').fadeIn();
 						$container.masonry({
 							columnWidth: '.blankslate-tile',
 							itemSelector: '.blankslate-tile'
