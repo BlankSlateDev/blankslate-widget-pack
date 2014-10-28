@@ -1,6 +1,6 @@
 <?php
 
-function loop_two( $primary, $secondary ){
+function loop_two( &$primary, &$secondary ){
   echo '<div class="grid loop-two">';
   for ($i = 0; $i < 2; $i ++){
     $business = array_shift($primary);
@@ -17,7 +17,7 @@ function loop_two( $primary, $secondary ){
   echo '</div>';
 }
 
-function loop_four( $primary, $secondary ){
+function loop_four( &$primary, &$secondary ){
   echo '<div class="grid loop-four">';
   for ( $i = 0; $i < 4; $i ++ ){
     $business = array_shift( $secondary );
@@ -34,7 +34,7 @@ function loop_four( $primary, $secondary ){
   echo '</div>';
 }
 
-function loop_six( $primary, $secondary ){
+function loop_six( &$primary, &$secondary ){
   echo '<div class="grid loop-six">';
   for ($i = 0; $i < 6; $i ++){
     $business = array_shift($secondary);
@@ -51,7 +51,7 @@ function loop_six( $primary, $secondary ){
   echo '</div>';
 }
 
-function loop_three_one( $primary, $secondary ){
+function loop_three_one( &$primary, &$secondary ){
   echo '<div class="grid loop-three-one">';
     //Do 3 Small Business
     for ($i = 0; $i < 3; $i ++){
@@ -80,7 +80,7 @@ function loop_three_one( $primary, $secondary ){
   echo '</div>';
 }
 
-function loop_one_three( $primary, $secondary ){
+function loop_one_three( &$primary, &$secondary ){
   echo '<div class="grid loop-one-three">';
     //Do Large Business
     $business = array_shift($primary);
