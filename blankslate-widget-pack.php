@@ -3,7 +3,7 @@
 Plugin Name: BlankSlate Widget Pack
 Description: Collection of Widgets to Enhance BlankSlate Directory and Publishing Tools.
 Version: 1.0.46
-Author: BlankSlate (DH)
+Author: BlankSlate
 Author URI: http://blankslate.com
 Text Domain: blankslate
 License: GPLv2 or later
