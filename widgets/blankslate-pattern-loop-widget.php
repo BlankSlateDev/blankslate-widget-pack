@@ -16,7 +16,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 	}
 	
 	function ShowLevels($levels, $selected){ ?>
-		<option value="" id="all-levels" <?php echo empty($selected) ? 'selected="selected"' : '' ?>>All</option> 
+		<option value="" id="all-levels" <?php echo empty($selected) ? 'selected="selected"' : '' ?>>Any Level</option> 
 		<?php
 		foreach ($levels as $level) { ?>
 			<option value="<?= $level['key'] ?>" id="<?= $level['key'] ?>" <?php echo $selected == $level['key'] ? 'selected="selected"' : '' ?>>
@@ -31,28 +31,90 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 	function form($instance) {
 		$instance = wp_parse_args( (array) $instance, array( 'title' => '' ) );
 		?>
+		<style type="text/css">
+			p {
+				float: left;
+				width: 100%;
+				padding-right: 20px;
+			}
+
+			h2 {
+				margin-top: 12px;
+				clear: both;
+			}
+
+			.configure-display,
+			.select-businesses,
+			.search-params {
+				overflow: auto;
+			}
+
+			.configure-display *,
+			.select-businesses *,
+			.search-params * {
+				box-sizing: border-box;
+			}
+
+			.configure-display {
+				clear: both;
+			}
+
+			.configure-display p {
+				width:20%;
+				float: left;
+				margin-right: 20px;
+			}
+
+			.half-width {
+				float: left;
+				width: 50%;
+				padding-right: 20px;
+				box-sizing: border-box;
+			}
+
+			.select-businesses {
+				clear: both;
+				width: 30%;
+				float: left;
+			}
+
+			.search-params {
+				float: left;
+				width: 70%;
+			}
+
+			.keys input {
+				float: left;
+				width: 80%;
+			}
+
+			.keys .dashicons-no {
+				float: left;
+				color: rgb(236,29,35);
+			}
+
+		</style>
+		<h2>Widget Header</h2>
 		<p>
 		  <label for="<?=$this->get_field_id('title'); ?>">Title:
 			<input class="widefat" id="<?=$this->get_field_id('title'); ?>" name="<?=$this->get_field_name('title'); ?>" type="text" value="<?=$instance['title'];?>" />
 		  </label>
 		</p>
-		<p>
-		  <label for="<?=$this->get_field_id('seeMoreText'); ?>">See More Text:
+		<p class="half-width">
+		  <label for="<?=$this->get_field_id('seeMoreText'); ?>">See More link text:
 			<input class="widefat" id="<?=$this->get_field_id('seeMoreText'); ?>" name="<?=$this->get_field_name('seeMoreText'); ?>" type="text" value="<?=$instance['seeMoreText'];?>" />
 		  </label>
 		</p>
-		<p>
-		  <label for="<?=$this->get_field_id('seeMore'); ?>">See More Link:
+		<p class="half-width">
+		  <label for="<?=$this->get_field_id('seeMore'); ?>">See More link URL:
 			<input class="widefat" id="<?=$this->get_field_id('seeMore'); ?>" name="<?=$this->get_field_name('seeMore'); ?>" type="text" value="<?=$instance['seeMore'];?>" />
 		  </label>
 		</p>
+
+		<div class="configure-display">
+		<h2>Configure display</h2>
 		<p>
-		  <label for="<?=$this->get_field_id('numRows'); ?>"> Number of Rows: 
-			<input class="widefat" id="<?=$this->get_field_id('numRows'); ?>" name="<?=$this->get_field_name('numRows'); ?>" type="text" value="<?=$instance['numRows'];?>" />
-		  </label>
-		</p>
-		<p>
-			<label for="<?= $this->get_field_id('startOn'); ?>"> What block to start pattern on: 
+			<label for="<?= $this->get_field_id('startOn'); ?>"> Display pattern: 
 				<select name="<?= $this->get_field_name('startOn'); ?>" id="<?= $this->get_field_id('startOn'); ?>" class="widefat">
 				<?php
 					$blocks = array( 'One Large, Three Small', 'Six Small', 'Three Small, One Large', 'Two Large',  'Large Top, Small Bottom', 'Four Medium' ); 
@@ -69,12 +131,42 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 			</label>
 		</p>
 		<p>
-			<label for="<?=$this->get_field_id('repeat'); ?>"> Repeat this block: </label>
+		  <label for="<?=$this->get_field_id('numRows'); ?>"> Total rows to display
+			<input class="widefat" id="<?=$this->get_field_id('numRows'); ?>" name="<?=$this->get_field_name('numRows'); ?>" type="text" value="<?=$instance['numRows'];?>" />
+		  </label>
+		</p>
+		<p>
+			<label for="<?=$this->get_field_id('repeat'); ?>"> Pattern to display after first row </label>
 			<select name="<?=$this->get_field_name('repeat'); ?>" id="<?=$this->get_field_id('repeat');?>">
-				<option value="true" <?=($instance['repeat'] == 'true') ? ' selected="selected"' : '' ?>>Yes</option>
-				<option value="false" <?=($instance['repeat'] == 'false') ? ' selected="selected"' : '' ?>>No</option>
+				<option value="true" <?=($instance['repeat'] == 'true') ? ' selected="selected"' : '' ?>>Same pattern</option>
+				<option value="false" <?=($instance['repeat'] == 'false') ? ' selected="selected"' : '' ?>>Next pattern</option>
 			</select>
 		</p>
+		</div>
+		
+		<h2>Select Businesses to include</h2>
+
+		<div class="select-businesses">
+			<h3>Pick specific businesses (enter 14 digit ID)</h3>
+			<div class="keys">
+				<?php 
+					//Outputs number of text inputs for keys equal to key length
+					for ($i = 1; $i <= $instance['key-length']; $i ++){
+					$keyString = 'key-' . $i;
+					echo "<p>";
+					  echo "<label for=\"" . $this->get_field_id($keyString) . "\"> Business Key {$i}";
+						echo "<input class=\"widefat\"
+												 id=\"" . $this->get_field_id($keyString) . "\" 
+												 name=\"" . $this->get_field_name($keyString) . "\" 
+												 type=\"text\" 
+												 value=\"" . $instance[$keyString] . "\" /><i class=\"delete-key dashicons dashicons-no\"></i>";
+					  echo "</label>";
+					echo "</p>";
+				} ?>
+			</div>
+			<button id="add-key">Add Key</button>
+			<button id="delete-key">Delete Key</button>
+		</div>
 
 		<?php
 			$promotions = new Promotions();
@@ -84,85 +176,66 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 			}
 		?>
 
-		<p>
-			<label for="<?= $this->get_field_id('large_block'); ?>"> Promo level for Large Block:
-				<select name="<?= $this->get_field_name('large_block'); ?>" id="<?= $this->get_field_id('large_block'); ?>" class="widefat">
-					<?php $this->ShowLevels($levels, $instance['large_block']); ?>
-				</select>
-			</label>
-		</p>
+		<div class="search-params">
+			<h3>Fill remaining slots with businesses that match the following criteria</h3>
+			<p class="half-width">
+			  <label for="<?=$this->get_field_id('address'); ?>">Center around address
+				<input class="widefat" id="<?=$this->get_field_id('address'); ?>" name="<?=$this->get_field_name('address'); ?>" type="text" value="<?=$instance['address'];?>" />
+			  </label>
+			</p>
+			<p class="half-width">
+			  <label for="<?=$this->get_field_id('content_score'); ?>">Minimum content completeness score (0-99)
+				<input class="widefat" id="<?=$this->get_field_id('content_score'); ?>" name="<?=$this->get_field_name('content_score'); ?>" type="text" value="<?=$instance['content_score'];?>" />
+			  </label>
+			</p>
+			<p>
+				<label for="<?= $this->get_field_id('sort_by'); ?>"> Sort by
+					<select name="<?= $this->get_field_name('sort_by'); ?>" id="<?= $this->get_field_id('sort_by'); ?>" class="widefat">
+							<option value="random" 		id="random" 	<?php echo $instance['sort_by'] == 'random' 	? 'selected="selected"' : '' ?>> Random	 </option>
+							<option value="distance" 	id="distance" <?php echo $instance['sort_by'] == 'distance' ? 'selected="selected"' : '' ?>> Distance </option>
+							<option value="name" 			id="name" 		<?php echo $instance['sort_by'] == 'name' 		? 'selected="selected"' : '' ?>> Name		 </option>
+							<option value="content" 	id="content" 	<?php echo $instance['sort_by'] == 'content' 	? 'selected="selected"' : '' ?>> Content	 </option>
+							<option value="" 					id="none" 		<?php echo $instance['sort_by'] == '' 				? 'selected="selected"' : '' ?>> Default	 </option>
+					</select>
+				</label>
+			</p>
 
-		<p>
-			<label for="<?= $this->get_field_id('small_block'); ?>"> Promo level for Small Blocks:
-				<select name="<?= $this->get_field_name('small_block'); ?>" id="<?= $this->get_field_id('small_block'); ?>" class="widefat">
-					<?php $this->ShowLevels($levels, $instance['small_block']); ?>
-				</select>
-			</label>
-		</p>
+			<p class="half-width">
+				<label for="<?= $this->get_field_id('large_block'); ?>"> Promotional level for large blocks
+					<select name="<?= $this->get_field_name('large_block'); ?>" id="<?= $this->get_field_id('large_block'); ?>" class="widefat">
+						<?php $this->ShowLevels($levels, $instance['large_block']); ?>
+					</select>
+				</label>
+			</p>
+			<p class="half-width">
+				<label for="<?= $this->get_field_id('small_block'); ?>"> Promotional level for small blocks
+					<select name="<?= $this->get_field_name('small_block'); ?>" id="<?= $this->get_field_id('small_block'); ?>" class="widefat">
+						<?php $this->ShowLevels($levels, $instance['small_block']); ?>
+					</select>
+				</label>
+			</p>
+			<p class="half-width">
+			  <label for="<?=$this->get_field_id('num_enhanced'); ?>"> Number of Enhanced: 
+				<input class="widefat" id="<?=$this->get_field_id('num_enhanced'); ?>" name="<?=$this->get_field_name('num_enhanced'); ?>" type="text" value="<?=$instance['num_enhanced'];?>" />
+			  </label>
+			</p>
+			<p class="half-width">
+			  <label for="<?=$this->get_field_id('num_basic'); ?>"> Number of Basic: 
+				<input class="widefat" id="<?=$this->get_field_id('num_basic'); ?>" name="<?=$this->get_field_name('num_basic'); ?>" type="text" value="<?=$instance['num_basic'];?>" />
+			  </label>
+			</p>
+			<p>
+				<label>Include only from the following categories
+				<?php
+					
+					$ls_cat_tree = blankslate_get_categories();
+					$cat_html = blankslate_print_widget_cats( $ls_cat_tree[0]['children'], 'none', $instance, 0, $this );
+					echo $cat_html;
 
-		<p>
-			<label for="<?= $this->get_field_id('sort_by'); ?>"> Sort Business Results By:
-				<select name="<?= $this->get_field_name('sort_by'); ?>" id="<?= $this->get_field_id('sort_by'); ?>" class="widefat">
-						<option value="random" 		id="random" 	<?php echo $instance['sort_by'] == 'random' 	? 'selected="selected"' : '' ?>> Random	 </option>
-						<option value="distance" 	id="distance" <?php echo $instance['sort_by'] == 'distance' ? 'selected="selected"' : '' ?>> Distance </option>
-						<option value="name" 			id="none" 		<?php echo $instance['sort_by'] == 'name' 		? 'selected="selected"' : '' ?>> Name		 </option>
-						<option value="content" 	id="content" 	<?php echo $instance['sort_by'] == 'content' 	? 'selected="selected"' : '' ?>> Content	 </option>
-						<option value="" 					id="none" 		<?php echo $instance['sort_by'] == '' 				? 'selected="selected"' : '' ?>> Default	 </option>
-				</select>
-			</label>
-		</p>
-		<p>
-		  <label for="<?=$this->get_field_id('address'); ?>">Exact Address:
-			<input class="widefat" id="<?=$this->get_field_id('address'); ?>" name="<?=$this->get_field_name('address'); ?>" type="text" value="<?=$instance['address'];?>" />
-		  </label>
-		</p>
-		<p>
-		  <label for="<?=$this->get_field_id('content_score'); ?>">Result Content Score (0-99):
-			<input class="widefat" id="<?=$this->get_field_id('content_score'); ?>" name="<?=$this->get_field_name('content_score'); ?>" type="text" value="<?=$instance['content_score'];?>" />
-		  </label>
-		</p>
-		<p>
-		  <label for="<?=$this->get_field_id('num_enhanced'); ?>"> Number of Enhanced: 
-			<input class="widefat" id="<?=$this->get_field_id('num_enhanced'); ?>" name="<?=$this->get_field_name('num_enhanced'); ?>" type="text" value="<?=$instance['num_enhanced'];?>" />
-		  </label>
-		</p>
-		<p>
-		  <label for="<?=$this->get_field_id('num_basic'); ?>"> Number of Basic: 
-			<input class="widefat" id="<?=$this->get_field_id('num_basic'); ?>" name="<?=$this->get_field_name('num_basic'); ?>" type="text" value="<?=$instance['num_basic'];?>" />
-		  </label>
-		</p>
-		<p>
-			<label>Categories: 
-			<?php
-				
-				$ls_cat_tree = blankslate_get_categories();
-				$cat_html = blankslate_print_widget_cats( $ls_cat_tree[0]['children'], 'none', $instance, 0, $this );
-				echo $cat_html;
-
-			?>
-			<a href="javascript:(void);" class="ls-expand-cats">Expand All</a> 
-		</p>
-		
-		<div class="keys">
-			<?php 
-				//Outputs number of text inputs for keys equal to key length
-				for ($i = 1; $i <= $instance['key-length']; $i ++){
-				$keyString = 'key-' . $i;
-				echo "<p>";
-				  echo "<label for=\"" . $this->get_field_id($keyString) . "\"> Key {$i} :";
-					echo "<input class=\"widefat\"
-											 id=\"" . $this->get_field_id($keyString) . "\" 
-											 name=\"" . $this->get_field_name($keyString) . "\" 
-											 type=\"text\" 
-											 value=\"" . $instance[$keyString] . "\" />";
-				  echo "</label>";
-				echo "</p>";
-			} ?>
+				?>
+				<a href="javascript:(void);" class="ls-expand-cats">Expand All</a> 
+			</p>
 		</div>
-
-		
-		<button id="add-key">Add Key</button>
-		<button id="delete-key">Delete Key</button>
 
 		<input class="widefat" id="<?=$this->get_field_id('key-length'); ?>" name="<?=$this->get_field_name('key-length'); ?>" type="hidden" value="<?= $instance['key-length'] ? $instance['key-length'] : 0 ;?>" />
 
@@ -171,9 +244,9 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 				//Template for key input element
 				var keyTemplate = function( i ){
 					return '<p>' +
-					  '<label for="<?=$this->get_field_id("key-' + i + '"); ?>"> Key ' + i + ':' +
+					  '<label for="<?=$this->get_field_id("key-' + i + '"); ?>"> Business Key ' + i + ':' +
 						'<input class="widefat" id="<?=$this->get_field_id("key-' + i + '"); ?>" name="<?=$this->get_field_name("key-' + i + '"); ?>" type="text" value="<?=$instance["key-' + i + '"];?>" />' +
-					  '</label>' +
+					  '</label><i class="delete-key dashicons dashicons-no"></i>' +
 					'</p>';
 				}
 					
@@ -194,14 +267,17 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 
 				//On click delete, remove last item in list
 				//Decrement keylength value
-				jQuery('#delete-key').on('click', function(){
+				jQuery('.keys').on('click', '.delete-key', function(){
 					var keyLengthSelector = "<?=$this->get_field_id('key-length'); ?>";
 					var keyLength = jQuery('#' + keyLengthSelector).val();
 
-					if ( keyLength > 0 ){
-						jQuery('.keys p:last').remove();
-						jQuery('#' + keyLengthSelector).val(+keyLength - 1);
-					}
+					jQuery(this).closest('p').remove();
+					jQuery('#' + keyLengthSelector).val(+keyLength - 1);
+
+					// if ( keyLength > 0 ){
+					// 	jQuery('.keys p:last').remove();
+					// 	jQuery('#' + keyLengthSelector).val(+keyLength - 1);
+					// }
 				});
 			}(jQuery));
 		</script>
@@ -331,6 +407,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 					if ( count($key_array) > 0 ){
 						$keyquery = array();
 						$keyquery['keys'] = $key_string;
+						$keyquery['sort'] = 'none';
 						$featured = new SearchResults(null, $keyquery);
 
 						if( $featured->call() === true ){
