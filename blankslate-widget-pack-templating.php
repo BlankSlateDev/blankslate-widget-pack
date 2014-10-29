@@ -135,7 +135,7 @@ function print_business($business, $width, $height){
               '&utm_medium=' . $utm_medium .
               '&utm_source=' . $utm_source .
               '&utm_campaign=' . $utm_campaign .
-              ($utm_content ? ('&utm_content=' . $utm_content) : '') . '" >';
+              (isset($utm_content) ? ('&utm_content=' . $utm_content) : '') . '" >';
   echo    '<div class="img-hold">';
     if (strpos($photo,'googleapis') !== false) { ?>
       <img src="<?= BLANKSLATE_DIRECTORY_URL ?>scripts/timthumb.php?w=<?= $width ?>&h=<?= $height ?>&zc=1&src=<?= BLANKSLATE_DIRECTORY_PLACEHOLDER_URL ?>" alt="<?=$business['business_name']?>" >

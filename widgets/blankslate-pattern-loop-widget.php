@@ -394,9 +394,9 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 								}
 							
 								if ( $different ){
-									call_user_func_array($patterns[$order], array($premium, $businesses));
+									call_user_func_array($patterns[$order], array(&$premium, &$businesses));
 								} else {
-									call_user_func_array($patterns[$order], array($businesses, $businesses));
+									call_user_func_array($patterns[$order], array(&$businesses, &$businesses));
 								}
 							
 								$i += 1;
@@ -424,7 +424,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 								$order = 0;
 							}
 						
-							call_user_func_array($patterns[$order], array($businesses, $businesses));
+							call_user_func_array($patterns[$order], array(&$businesses, &$businesses));
 						
 							$i += 1;
 							if ($repeat === 'false'){
