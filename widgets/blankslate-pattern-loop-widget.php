@@ -148,7 +148,12 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 
 		<div class="select-businesses">
 			<h3>Pick specific businesses (enter 14 digit ID)</h3>
-			<div class="keys">
+			<p>
+				<label for="<?= $this->get_field_id('myKeys') ?>">Comma separated list of businesses:
+					<textarea name="<?= $this->get_field_name('myKeys') ?>" id="<?= $this->get_field_id('myKeys') ?>" cols="30" rows="10"><?= trim($instance['myKeys']) ?></textarea>
+				</label>
+			</p>
+<!-- 			<div class="keys">
 				<?php 
 					//Outputs number of text inputs for keys equal to key length
 					for ($i = 1; $i <= $instance['key-length']; $i ++){
@@ -165,7 +170,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 				} ?>
 			</div>
 			<button id="add-key">Add Key</button>
-			<button id="delete-key">Delete Key</button>
+			<button id="delete-key">Delete Key</button> -->
 		</div>
 
 		<?php
@@ -310,6 +315,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 		$instance['sort_by'] 				= esc_attr( strip_tags($new_instance['sort_by']) );
 		$instance['num_enhanced'] 	= esc_attr( strip_tags($new_instance['num_enhanced']) );
 		$instance['num_basic'] 			= esc_attr( strip_tags($new_instance['num_basic']) );
+		$instance['myKeys'] 			= esc_textarea( strip_tags($new_instance['myKeys']) );
 
 		foreach ($fields as $field) {
 			$instance[$field] = $new_instance[$field];
@@ -396,6 +402,8 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 					}
 					$key_string = implode(',', $key_array);
 
+					$myKeys = trim($instance['myKeys']);
+
 					$patterns = array( 'loop_one_three', 'loop_six', 'loop_three_one', 'loop_two',  'loop_large_small', 'loop_four');
 					$businesses = array();
 
@@ -404,9 +412,9 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 					$query['cat'] = $categories;
 					$query['promote_on'] = $smallLevel;
 
-					if ( count($key_array) > 0 ){
+					if ( $myKeys !== '' ){
 						$keyquery = array();
-						$keyquery['keys'] = $key_string;
+						$keyquery['keys'] = $myKeys;
 						$keyquery['sort'] = 'none';
 						$featured = new SearchResults(null, $keyquery);
 
