@@ -403,6 +403,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 					$key_string = implode(',', $key_array);
 
 					$myKeys = trim($instance['myKeys']);
+					$myKeysArray = explode(',', $myKeys);
 
 					$patterns = array( 'loop_one_three', 'loop_six', 'loop_three_one', 'loop_two',  'loop_large_small', 'loop_four');
 					$businesses = array();
@@ -421,6 +422,13 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 						if( $featured->call() === true ){
 							$results = $featured->getData();
 							$businesses = array_merge($businesses, $results['data']);
+
+							$new_order = array();
+							foreach ($myKeysArray as $key) {
+								$new_order[$businesses[$key]['key']] =  $businesses[$key];
+							}
+
+							$businesses = $new_order;
 						}
 					}
 					
