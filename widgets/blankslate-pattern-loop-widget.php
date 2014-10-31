@@ -305,8 +305,6 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 			$lng = $addressArray['lon'];
 		}
 		
-		$content_score = $instance['content_score'];
-
 		$categories = '';
 		foreach ($instance as $key => $value) {
 			if ($value == 'on'){
@@ -317,13 +315,11 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 
 		//Number of business rows to output
 		$numRows = (!empty($instance['numRows'])) ? $instance['numRows'] : 4;
-
 		//What level of pattern to start on
 		$startOn = (!empty($instance['startOn'])) ? $instance['startOn'] : 0;
-
 		//Repeat same part of pattern continously
 		$repeat = $instance['repeat'];
-
+		$content_score = $instance['content_score'];
 		$sortBy = $instance['sort_by'];
 
 		//What promotion levels the difference blocks should pull from
@@ -345,14 +341,11 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 				<?php endif; ?>
 
 				<?php
-					// $key_array = array();
-					// for ( $i = 1; $i <= $instance['key-length']; $i ++){
-					// 	array_push($key_array, $instance['key-' . $i]);
-					// }
-					// $key_string = implode(',', $key_array);
-
-					$my_key_array = explode("\n", $instance['myKeys']);
-					$my_key_string = implode(',', $my_key_array);
+					$needles = array(",\n", ",", "\n");
+					$sanitized = trim( str_replace($needles, ',', $instance['myKeys']), " \n," );
+					
+					$my_key_array = explode(',', $sanitized);
+					$my_key_string = $sanitized;
 
 					$patterns = array( 'loop_one_three', 'loop_six', 'loop_three_one', 'loop_two',  'loop_large_small', 'loop_four');
 					$businesses = array();
