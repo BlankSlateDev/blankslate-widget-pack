@@ -149,7 +149,7 @@ class BlankSlateDirectoryPatternLoop extends WP_Widget {
 		<div class="select-businesses">
 			<h3>Pick specific businesses (enter 14 digit ID)</h3>
 			<p>
-				<label for="<?= $this->get_field_id('myKeys') ?>">Comma separated list of businesses:
+				<label for="<?= $this->get_field_id('myKeys') ?>">Comma or newline separated list of businesses:
 					<textarea name="<?= $this->get_field_name('myKeys') ?>" id="<?= $this->get_field_id('myKeys') ?>" cols="30" rows="10"><?= $instance['myKeys'] ?></textarea>
 				</label>
 			</p>
