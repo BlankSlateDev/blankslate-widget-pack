@@ -2,9 +2,11 @@
 	<?php
 		$url = $business['url'];
 
-		global $post;
-		$post_slug = $post->post_name;
-		$utm_medium = $post_slug;
+		if ( is_single() ){
+			global $post;
+			$post_slug = $post->post_name;
+			$utm_medium = $post_slug;
+		}
 
 		$parts = parse_url($business['url']);
 		parse_str($parts['query'], $query);
@@ -16,7 +18,7 @@
 			$utm_content = implode(',', $business['promote_on']);
 		}
 
-		$url .= '&utm_medium=' . $utm_medium .
+		$url .= ($utm_medium ? ('&utm_medium=' . $utm_medium) : '') .
             '&utm_source=' . $utm_source .
             '&utm_campaign=' . $utm_campaign .
             ($utm_content ? ('&utm_content=' . $utm_content) : '') . '"';
