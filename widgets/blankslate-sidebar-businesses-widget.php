@@ -166,9 +166,6 @@ class BlankSlateDirectorySidebarBusinesses extends WP_Widget {
 		//Number of business rows to output
 		$numRows = (!empty($instance['numRows'])) ? $instance['numRows'] : 2;
 
-		//Repeat same part of pattern continously
-		$repeat = $instance['repeat'];
-
 		$promoLevel = $instance['promo_level'];
 
 		echo $before_widget; ?>

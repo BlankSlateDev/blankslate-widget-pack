@@ -18,10 +18,10 @@
 			$utm_content = implode(',', $business['promote_on']);
 		}
 
-		$url .= ($utm_medium ? ('&utm_medium=' . $utm_medium) : '') .
+		$url .= ( !empty($utm_medium) ? ('&utm_medium=' . $utm_medium) : '') .
             '&utm_source=' . $utm_source .
             '&utm_campaign=' . $utm_campaign .
-            ($utm_content ? ('&utm_content=' . $utm_content) : '') . '"';
+            ( !empty($utm_content) ? ('&utm_content=' . $utm_content) : '') . '"';
 	?>
 	<a href="<?= $url ?>" class="info-hold" target="_blank">
 		<div class="text">
