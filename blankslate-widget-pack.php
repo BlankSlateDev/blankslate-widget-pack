@@ -16,7 +16,8 @@ Please contact BlankSlate for details
 require 'plugin-updates/plugin-update-checker.php';
 $MyUpdateChecker = PucFactory::buildUpdateChecker(
 	'http://pages-dev.blankslate.com/info.json',
-	__FILE__
+	__FILE__,
+	'blankslate-widget-pack'
 );
 
 define('BLANKSLATE_WIDGET_PACK_DIR', plugin_dir_path(__FILE__));
