@@ -2,7 +2,7 @@
 /*
 Plugin Name: BlankSlate Widget Pack
 Description: Collection of Widgets to Enhance BlankSlate Directory and Publishing Tools.
-Version: 1.0.46
+Version: 0.0.0
 Author: BlankSlate
 Author URI: http://blankslate.com
 Text Domain: blankslate
@@ -12,6 +12,12 @@ Copyright 2014 by BlankSlate
 
 Please contact BlankSlate for details
 */
+
+require 'plugin-updates/plugin-update-checker.php';
+$MyUpdateChecker = PucFactory::buildUpdateChecker(
+	'http://pages-dev.blankslate.com/info.json',
+	__FILE__
+);
 
 define('BLANKSLATE_WIDGET_PACK_DIR', plugin_dir_path(__FILE__));
 define('BLANKSLATE_WIDGET_PACK_URL', plugin_dir_url(__FILE__));
