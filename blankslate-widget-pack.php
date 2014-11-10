@@ -3,7 +3,7 @@
 Plugin Name: BlankSlate Widget Pack
 Github Plugin URI:  https://github.com/BlankSlateDev/blankslate-widget-pack
 Description: Collection of Widgets to Enhance BlankSlate Directory and Publishing Tools.
-Version: 2.2.3
+Version: 2.2.4
 Author: BlankSlate Factory, Inc.
 Author URI: http://blankslate.com
 Text Domain: blankslate
