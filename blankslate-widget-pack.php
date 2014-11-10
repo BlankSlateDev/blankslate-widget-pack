@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: BlankSlate Widget Pack
-Plugin URI:  https://github.com/BlankSlateDev/blankslate-widget-pack
+Github Plugin URI:  https://github.com/BlankSlateDev/blankslate-widget-pack
 Description: Collection of Widgets to Enhance BlankSlate Directory and Publishing Tools.
 Version: 2.2.3
 Author: BlankSlate Factory, Inc.
