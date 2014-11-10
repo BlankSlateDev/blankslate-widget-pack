@@ -1,6 +1,7 @@
 <?php
 /*
 Plugin Name: BlankSlate Widget Pack
+Plugin URI:  https://github.com/BlankSlateDev/blankslate-widget-pack
 Description: Collection of Widgets to Enhance BlankSlate Directory and Publishing Tools.
 Version: 2.2.3
 Author: BlankSlate Factory, Inc.
@@ -11,12 +12,12 @@ Copyright 2014 by BlankSlate
 Please contact BlankSlate for details
 */
 
-require 'plugin-updates/plugin-update-checker.php';
-$MyUpdateChecker = PucFactory::buildUpdateChecker(
-	'http://pages-dev.blankslate.com/plugins/blankslate-widget-pack/info.json',
-	__FILE__,
-	'blankslate-widget-pack'
-);
+// require 'plugin-updates/plugin-update-checker.php';
+// $MyUpdateChecker = PucFactory::buildUpdateChecker(
+// 	'http://pages-dev.blankslate.com/plugins/blankslate-widget-pack/info.json',
+// 	__FILE__,
+// 	'blankslate-widget-pack'
+// );
 
 define('BLANKSLATE_WIDGET_PACK_DIR', plugin_dir_path(__FILE__));
 define('BLANKSLATE_WIDGET_PACK_URL', plugin_dir_url(__FILE__));
